@@ -14,32 +14,9 @@ public class Item {
     private String name;
     private String link;
 
-    // Constructor
-    public Item(String name, String purchaseLink) {
+    public Item(String name, String link) {
         this.name = name;
-        this.link = purchaseLink;
-    }
-
-    // Getters and Setters
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPurchaseLink() {
-        return link;
-    }
-
-    public void setPurchaseLink(String purchaseLink) {
-        this.link = purchaseLink;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{name='" + name + "', purchaseLink='" + link + "'}";
-    }
+        this.link = link;
+    }   
 }
 

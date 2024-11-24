@@ -33,4 +33,13 @@ public class Wedding {
     private List<String> invited;
     @DocumentReference //This makes the database store only the ids of the comments and the comments themselves will be stored in a separate collection
     private List<Comment> commentIds;
+
+    public Wedding(String weddingId, String weddingTitle, String dateTime, String location, User createdBy, int maxAttendees) {
+        this.weddingId = weddingId;
+        this.weddingTitle = weddingTitle;
+        this.dateTime = dateTime;
+        this.location = location;
+        this.createdBy = createdBy;
+        this.maxAttendees = maxAttendees;
+    }
 }

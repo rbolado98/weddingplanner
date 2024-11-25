@@ -32,7 +32,7 @@ public class Registry {
 
     // Remove an item by name
     public void removeItem(String name) {
-        items.removeIf(item -> item.getName().equalsIgnoreCase(name));
+        //items.removeIf(item -> item.getName().equalsIgnoreCase(name));
         System.out.println("Item removed: " + name);
     }
 

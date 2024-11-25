@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Wedding Planner</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f6f2;
+            color: #4b4b4b;
+        }
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #eae4d3;
+            color: #4b4b4b;
+            border-bottom: 2px solid #d2c7b5;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: normal;
+        }
+        header p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #6c6c6c;
+        }
+        main {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        main p {
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            margin: 20px 10px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            color: white;
+            background-color: #a19078;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-family: 'Arial', sans-serif;
+        }
+        .button:hover {
+            background-color: #8c7a62;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #eae4d3;
+            color: #6c6c6c;
+            border-top: 2px solid #d2c7b5;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Wedding Planner</h1>
+        <p>Your journey to an unforgettable wedding begins here.</p>
+    </header>
+    <main>
+        <p>We help you plan, organize, and create beautiful memories for your special day.</p>
+        <a href="/weddings" class="button">View Weddings</a>
+        <a href="/contact" class="button">Get in Touch</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 Wedding Planner App. Designed with elegance and care.</p>
+    </footer>
+</body>
+</html>

@@ -13,6 +13,9 @@ public class Item {
     private ObjectId id;
     private String name;
     private String link;
+    public Item(String name){
+        this.name = name;
+    }
 
     public Item(String name, String link) {
         this.name = name;

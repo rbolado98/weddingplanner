@@ -21,5 +21,9 @@ public class User {
     // Lists of weddings
     // private List<Wedding> createdWeddings;
     // private List<Wedding> attendingWeddings;
+
+    public User(String name){
+        this.name = name;
+    }
 }
 

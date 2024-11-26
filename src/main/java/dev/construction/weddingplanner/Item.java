@@ -20,6 +20,6 @@ public class Item {
     public Item(String name, String link) {
         this.name = name;
         this.link = link;
-    }   
+    }
 }
 

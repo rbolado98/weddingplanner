@@ -42,6 +42,14 @@ public class Wedding {
         this.location = location;
         this.maxAttendees = maxAttendees;
     }
+    public Wedding(String weddingId, String weddingTitle, String dateTime, String location, User user, String maxAttendees) {
+        this.weddingId = weddingId;
+        this.weddingTitle = weddingTitle;
+        this.dateTime = dateTime;
+        this.location = location;
+        this.createdBy = user;
+        this.maxAttendees = maxAttendees;
+    }
 
     public Wedding(String weddingId, String weddingTitle, String dateTime, String location, User createdBy, String maxAttendees, List<String> waitlist, List<String> invited) {
         this.weddingId = weddingId;

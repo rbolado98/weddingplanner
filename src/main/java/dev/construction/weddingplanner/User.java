@@ -32,6 +32,12 @@ public class User {
         this.password = password;
         this.isAdmin = false;
     }
+    public User(String name, String email, String password, boolean isAdmin) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = isAdmin;
+    }
 }
 
 

@@ -8,7 +8,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
+import org.json.*;
 
 @Controller
 public class WelcomeController {
@@ -33,21 +35,51 @@ public class WelcomeController {
         this.maxAttendees = maxAttendees;
     }
          */
+        JSONArray weddingarray = null;
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/api/v1/weddings"))
                 .build();
+        List<Wedding> weddings = new ArrayList<Wedding>();
         try{
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
+            // System.out.println(response.body());
+            weddingarray = new JSONArray(response.body());
+            for (int i = 0; i < weddingarray.length(); i++) {
+                System.out.println(i);
+                JSONObject wedding = weddingarray.getJSONObject(i);
+                /*
+                 *  "createdBy": {
+                    "id": null,
+                    "name": "John Doe",
+                    "email": "john.doe@example.com",
+                    "password": "Password123",
+                    "admin": true
+                },
+                 */
+                User user = null;
+                if(wedding.get("createdBy").equals("null")){
+                    System.out.println(wedding.get("createdBy"));
+                    JSONObject userobject = wedding.getJSONObject("createdBy");
+                    user = new User(
+                        userobject.getString("name"),
+                        userobject.getString("email"),
+                        userobject.getString("password"),
+                        userobject.getBoolean("admin")
+                    );
+                }
+                weddings.add(
+                    new Wedding(wedding.getString("weddingId"), 
+                    wedding.getString("weddingTitle"), 
+                    wedding.getString("dateTime"), 
+                    wedding.getString("location"), 
+                    user,
+                    wedding.getString("maxAttendees")));
+            }
         }
         catch (Exception e){
             System.out.println("Error: " + e);
         }
-        List<Wedding> weddings = List.of(
-            new Wedding("12345", "Dream Wedding", "12/31/2024 6:00 PM", "Central Park, NYC", new User("John Doe"), 100),
-            new Wedding("67890", "Beach Wedding", "06/30/2024 4:00 PM", "Miami Beach, FL", new User("Jane Doe"), 50)
-        );
         model.addAttribute("weddings", weddings);
         return "profile"; // Matches profile.html in the templates folder
     }

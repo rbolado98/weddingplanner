@@ -124,28 +124,25 @@
     </header>
     <main>
         <!-- Wedding ID Search and RSVP Section -->
-        <div class="form-section">
-            <h2>Search or Respond to an Event</h2>
-            <form action="/rsvp-event" method="POST">
-                <div class="form-group">
-                    <label for="weddingId">Enter Wedding ID:</label>
-                    <input type="text" id="weddingId" name="weddingId" placeholder="e.g., 12345" required>
-                </div>
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" id="accept" name="response" value="accept">
-                        Accept Invite
-                    </label>
-                </div>
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" id="decline" name="response" value="decline">
-                        Decline Invite
-                    </label>
-                </div>
-                <button type="submit" onclick="return sendConfirmation()">Submit RSVP</button>
-            </form>
-        </div>
+        <form onsubmit="return sendConfirmation(event)">
+            <div class="form-group">
+                <label for="weddingId">Enter Wedding ID:</label>
+                <input type="text" id="weddingId" name="weddingId" placeholder="e.g., 12345" required>
+            </div>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" id="accept" name="response" value="accept">
+                    Accept Invite
+                </label>
+            </div>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" id="decline" name="response" value="decline">
+                    Decline Invite
+                </label>
+            </div>
+            <button type="submit">Submit RSVP</button>
+        </form>
 
         <!-- RSVP Status Table -->
         <h2>RSVP Status</h2>
@@ -185,27 +182,30 @@
     </footer>
 
     <script>
-        function sendConfirmation() {
+        function sendConfirmation(event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+    
             const acceptChecked = document.getElementById('accept').checked;
             const declineChecked = document.getElementById('decline').checked;
             const weddingId = document.getElementById('weddingId').value;
-
+    
             if (!weddingId) {
                 alert('Please enter a Wedding ID.');
-                return false; // Prevent form submission if no ID is provided
+                return false; // Stop further execution
             }
-
+    
             if (acceptChecked) {
                 alert(`Thank you! You have accepted the invite for Wedding ID: ${weddingId}.`);
             } else if (declineChecked) {
                 alert(`You have declined the invite for Wedding ID: ${weddingId}.`);
             } else {
                 alert('Please select an RSVP option (Accept or Decline).');
-                return false; // Prevent form submission if no option is selected
+                return false; // Stop further execution
             }
-
-            // Allow form submission
-            return true;
+    
+            // No redirection or further action
+            return false;
         }
     </script>
 </body>

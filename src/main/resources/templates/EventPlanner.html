@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,7 +33,7 @@
             text-align: center;
             padding: 50px 20px;
         }
-        .event-details {
+        .event-form {
             max-width: 600px;
             margin: 20px auto;
             background-color: #ffffff;
@@ -42,20 +42,31 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: left;
         }
-        .event-details h2 {
+        .event-form h2 {
             font-size: 1.8rem;
             margin-bottom: 10px;
         }
-        .event-details p {
-            margin: 5px 0;
-            font-size: 1.1rem;
+        .form-group {
+            margin-bottom: 15px;
         }
-        .event-details strong {
+        label {
+            font-size: 1rem;
             color: #6c6c6c;
         }
-        .button {
+        input[type="text"],
+        input[type="number"],
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-button {
             display: inline-block;
-            margin: 20px 10px;
+            margin: 20px 0;
             padding: 15px 30px;
             font-size: 1rem;
             color: white;
@@ -63,10 +74,12 @@
             border: none;
             border-radius: 5px;
             text-decoration: none;
+            cursor: pointer;
             transition: background-color 0.3s ease;
             font-family: 'Arial', sans-serif;
+            width: 100%;
         }
-        .button:hover {
+        .submit-button:hover {
             background-color: #8c7a62;
         }
         footer {
@@ -84,24 +97,38 @@
 </head>
 <body>
     <header>
-        <h1>Event Details</h1>
-        <p>Plan and manage your wedding event here.</p>
+        <h1>Event Planner</h1>
+        <p>Enter the details of your wedding event below.</p>
     </header>
     <main>
-        <div class="event-details">
-            <h2 th:text="${weddingTitle}">Dream Wedding</h2>
-            <p><strong>Event ID:</strong> <span th:text="${id}">12345</span></p>
-            <p><strong>Date and Time:</strong> <span th:text="${dateTime}">MM/DD/YYYY HH:MM</span></p>
-            <p><strong>Location:</strong> <span th:text="${location}">Central Park, NYC</span></p>
-            <p><strong>Created By:</strong> <span th:text="${createdBy.name}">John Doe</span></p>
-            <p><strong>Max Attendees:</strong> <span th:text="${maxAttendees}">100</span></p>
-            <p><strong>Current Attendees:</strong> <span th:text="${attendees.size()}">50</span></p>
-            <p><strong>Waitlist:</strong> <span th:text="${waitlist.size()}">10</span></p>
-            <p><strong>Registry Items:</strong> <span th:text="${registry.size()}">5</span></p>
-        </div>
-        <a href="/profile" class="button">View Profile</a>
-        <a href="/add-attendees" class="button">Add Attendees</a>
-        <a href="/edit-event" class="button">Edit Event</a>
+        <form class="event-form">
+            <h2>Create Event</h2>
+            <div class="form-group">
+                <label for="eventTitle">Event Title:</label>
+                <input type="text" id="eventTitle" name="eventTitle" placeholder="e.g., Dream Wedding" required>
+            </div>
+            <div class="form-group">
+                <label for="eventId">Event ID:</label>
+                <input type="text" id="eventId" name="eventId" placeholder="e.g., 12345" required>
+            </div>
+            <div class="form-group">
+                <label for="eventDateTime">Date and Time:</label>
+                <input type="datetime-local" id="eventDateTime" name="eventDateTime" required>
+            </div>
+            <div class="form-group">
+                <label for="eventLocation">Location:</label>
+                <input type="text" id="eventLocation" name="eventLocation" placeholder="e.g., Central Park, NYC" required>
+            </div>
+            <div class="form-group">
+                <label for="createdBy">Created By:</label>
+                <input type="text" id="createdBy" name="createdBy" placeholder="e.g., John Doe" required>
+            </div>
+            <div class="form-group">
+                <label for="maxAttendees">Max Attendees:</label>
+                <input type="number" id="maxAttendees" name="maxAttendees" placeholder="e.g., 100" required>
+            </div>
+            <button type="submit" class="submit-button">Create Event</button>
+        </form>
     </main>
     <footer>
         <p>&copy; 2024 Wedding Planner App. Designed with elegance and care.</p>

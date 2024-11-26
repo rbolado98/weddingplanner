@@ -33,19 +33,9 @@ public class WelcomeController {
         return "signup"; // Matches signup.html in the templates folder
     }
 
-    // Route for the Event Planning Page (EventPlanning.html)
-    @GetMapping("/event")
-    public String showEventPlanningPage(Model model) {
-        // Add attributes to the model for dynamic rendering
-        model.addAttribute("id", "12345");
-        model.addAttribute("weddingTitle", "Dream Wedding");
-        model.addAttribute("dateTime", "12/31/2024 6:00 PM");
-        model.addAttribute("location", "Central Park, NYC");
-        model.addAttribute("createdBy", new User("John Doe")); // Replace with your User object
-        model.addAttribute("attendees", List.of(new User("Jane Doe"), new User("Emily Smith")));
-        model.addAttribute("maxAttendees", 100);
-        model.addAttribute("waitlist", List.of("John Smith", "Sarah Lee"));
-        model.addAttribute("registry", List.of(new Item("Dinner Set"), new Item("Wine Glasses")));
-        return "EventPlanning"; // Matches EventPlanning.html in the templates folder
+    // Route for the Event Planner Page (eventplanner.html)
+    @GetMapping("/eventplanner")
+    public String showEventPlannerPage() {
+        return "eventplanner"; // Matches eventplanner.html in the templates folder
     }
 }

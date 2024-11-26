@@ -1,7 +1,7 @@
 package dev.construction.weddingplanner;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -22,5 +22,12 @@ public class UserService {
         mongoTemplate.insert(user, "users");
         return user;
     }
+
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
+    // public User validateUser(String email, String password) {
+    //     return mongoTemplate
+    // }
 
 }

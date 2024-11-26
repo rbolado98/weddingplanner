@@ -4,8 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
-
 @Controller
 public class WelcomeController {
 
@@ -37,5 +35,11 @@ public class WelcomeController {
     @GetMapping("/eventplanner")
     public String showEventPlannerPage() {
         return "eventplanner"; // Matches eventplanner.html in the templates folder
+    }
+
+    // Route for My Events Page (myevents.html)
+    @GetMapping("/myevents")
+    public String showMyEventsPage() {
+        return "myevents"; // Matches myevents.html in the templates folder
     }
 }

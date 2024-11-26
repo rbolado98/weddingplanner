@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Planning - Wedding Planner</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f6f2;
+            color: #4b4b4b;
+        }
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #eae4d3;
+            color: #4b4b4b;
+            border-bottom: 2px solid #d2c7b5;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: normal;
+        }
+        header p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #6c6c6c;
+        }
+        main {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .event-details {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .event-details h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .event-details p {
+            margin: 5px 0;
+            font-size: 1.1rem;
+        }
+        .event-details strong {
+            color: #6c6c6c;
+        }
+        .button {
+            display: inline-block;
+            margin: 20px 10px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            color: white;
+            background-color: #a19078;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-family: 'Arial', sans-serif;
+        }
+        .button:hover {
+            background-color: #8c7a62;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #eae4d3;
+            color: #6c6c6c;
+            border-top: 2px solid #d2c7b5;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Event Details</h1>
+        <p>Plan and manage your wedding event here.</p>
+    </header>
+    <main>
+        <div class="event-details">
+            <h2 th:text="${weddingTitle}">Dream Wedding</h2>
+            <p><strong>Event ID:</strong> <span th:text="${id}">12345</span></p>
+            <p><strong>Date and Time:</strong> <span th:text="${dateTime}">MM/DD/YYYY HH:MM</span></p>
+            <p><strong>Location:</strong> <span th:text="${location}">Central Park, NYC</span></p>
+            <p><strong>Created By:</strong> <span th:text="${createdBy.name}">John Doe</span></p>
+            <p><strong>Max Attendees:</strong> <span th:text="${maxAttendees}">100</span></p>
+            <p><strong>Current Attendees:</strong> <span th:text="${attendees.size()}">50</span></p>
+            <p><strong>Waitlist:</strong> <span th:text="${waitlist.size()}">10</span></p>
+            <p><strong>Registry Items:</strong> <span th:text="${registry.size()}">5</span></p>
+        </div>
+        <a href="/profile" class="button">View Profile</a>
+        <a href="/add-attendees" class="button">Add Attendees</a>
+        <a href="/edit-event" class="button">Edit Event</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 Wedding Planner App. Designed with elegance and care.</p>
+    </footer>
+</body>
+</html>

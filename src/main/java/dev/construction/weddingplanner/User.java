@@ -8,18 +8,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "weddings")
+@Document(collection = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
     private ObjectId id;
-    private String userId;
     private String name;
     private String email;
+    private String password;
     private boolean isAdmin;
     // Lists of weddings
     // private List<Wedding> createdWeddings;
     // private List<Wedding> attendingWeddings;
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = false;
+    }
 }
+
+
 

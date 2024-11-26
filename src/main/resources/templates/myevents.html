@@ -37,6 +37,52 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+        .form-section {
+            margin-bottom: 30px;
+        }
+        .form-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 1rem;
+            color: #6c6c6c;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: white;
+            background-color: #a19078;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #8c7a62;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -74,9 +120,34 @@
 <body>
     <header>
         <h1>My Events</h1>
-        <p>Check your RSVP status for upcoming events.</p>
+        <p>Check your RSVP status for upcoming events or respond to an invite.</p>
     </header>
     <main>
+        <!-- Wedding ID Search and RSVP Section -->
+        <div class="form-section">
+            <h2>Search or Respond to an Event</h2>
+            <form action="/rsvp-event" method="POST">
+                <div class="form-group">
+                    <label for="weddingId">Enter Wedding ID:</label>
+                    <input type="text" id="weddingId" name="weddingId" placeholder="e.g., 12345" required>
+                </div>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="accept" name="response" value="accept">
+                        Accept Invite
+                    </label>
+                </div>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="decline" name="response" value="decline">
+                        Decline Invite
+                    </label>
+                </div>
+                <button type="submit" onclick="return sendConfirmation()">Submit RSVP</button>
+            </form>
+        </div>
+
+        <!-- RSVP Status Table -->
         <h2>RSVP Status</h2>
         <table>
             <thead>
@@ -112,5 +183,30 @@
     <footer>
         <p>&copy; 2024 Wedding Planner App. Designed with elegance and care.</p>
     </footer>
+
+    <script>
+        function sendConfirmation() {
+            const acceptChecked = document.getElementById('accept').checked;
+            const declineChecked = document.getElementById('decline').checked;
+            const weddingId = document.getElementById('weddingId').value;
+
+            if (!weddingId) {
+                alert('Please enter a Wedding ID.');
+                return false; // Prevent form submission if no ID is provided
+            }
+
+            if (acceptChecked) {
+                alert(`Thank you! You have accepted the invite for Wedding ID: ${weddingId}.`);
+            } else if (declineChecked) {
+                alert(`You have declined the invite for Wedding ID: ${weddingId}.`);
+            } else {
+                alert('Please select an RSVP option (Accept or Decline).');
+                return false; // Prevent form submission if no option is selected
+            }
+
+            // Allow form submission
+            return true;
+        }
+    </script>
 </body>
 </html>

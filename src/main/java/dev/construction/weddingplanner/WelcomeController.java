@@ -205,4 +205,48 @@ public class WelcomeController {
     public String showAttendPage() {
         return "attend"; // Matches attend.html in the templates folder
     }
+
+
+
+    @GetMapping("/wedding")
+    public String showWeddingPage(Model model, @RequestParam String weddingId) {
+        
+        JSONArray weddingarray = null;
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/v1/weddings/" + weddingId))
+                .build();
+        List<Wedding> weddings = new ArrayList<Wedding>();
+        try{
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            weddingarray = new JSONArray(response.body());
+            for (int i = 0; i < weddingarray.length(); i++) {
+                JSONObject wedding = weddingarray.getJSONObject(i);
+
+                User user = null;
+                if(wedding.get("createdBy").equals("null")){
+                    System.out.println(wedding.get("createdBy"));
+                    JSONObject userobject = wedding.getJSONObject("createdBy");
+                    user = new User(
+                        userobject.getString("name"),
+                        userobject.getString("email"),
+                        userobject.getString("password"),
+                        userobject.getBoolean("admin")
+                    );
+                }
+                weddings.add(
+                    new Wedding(wedding.getString("weddingId"), 
+                    wedding.getString("weddingTitle"), 
+                    wedding.getString("dateTime"), 
+                    wedding.getString("location"), 
+                    user,
+                    wedding.getString("maxAttendees")));
+            }
+        }
+        catch (Exception e){
+            System.out.println("Error: " + e);
+        }
+        model.addAttribute("weddings", weddings);
+        return "wedding"; // Matches profile.html in the templates folder
+    }
 }

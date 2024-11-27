@@ -38,6 +38,10 @@ public class User {
         this.password = password;
         this.isAdmin = isAdmin;
     }
+
+    public String getPassword() {
+        return password;
+    }
 }
 
 

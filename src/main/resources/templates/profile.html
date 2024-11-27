@@ -136,7 +136,7 @@
         <div class="event-list">
             <h2>Current Events RSVPd For</h2>
             <div class="event-item" th:each="wedding : ${weddings}">
-                <p><span>Wedding Title:</span> <span th:text="${wedding.weddingId}"></span></p>
+                <p><span>Wedding Title:</span> <span th:text="${wedding.weddingTitle}"></span></p>
                 <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
                 <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
                 <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>

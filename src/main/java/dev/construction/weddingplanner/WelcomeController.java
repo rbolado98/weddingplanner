@@ -1,8 +1,11 @@
 package dev.construction.weddingplanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -88,6 +91,19 @@ public class WelcomeController {
     @GetMapping("/login")
     public String showLoginPage() {
         return "index"; // Matches index.html in the templates folder
+    }
+    // Handle login form submission
+    @Autowired
+    private UserService userService;
+    @PostMapping("/login")
+    public String handleLogin(@RequestParam String email, @RequestParam String password, Model model) {
+        if (userService.authenticate(email, password)) {
+            model.addAttribute("email", email);
+            return "redirect:/profile"; // Redirect to profile page on successful login
+        } else {
+            model.addAttribute("error", "Invalid email or password");
+            return "index"; // Return to login page with error message
+        }
     }
 
     // Route for the Signup Page (signup.html)

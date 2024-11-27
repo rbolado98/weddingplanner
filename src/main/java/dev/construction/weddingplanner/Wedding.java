@@ -26,9 +26,9 @@ public class Wedding {
     private String location;
     private User createdBy;
     @DocumentReference //This makes the database store only the ids of the comments and the comments themselves will be stored in a separate collection
-    private List<User> attendees;
+    private List<User> attendees = new ArrayList<>();
     private String maxAttendees;
-    private List<String> waitlist;
+    private List<String> waitlist= new ArrayList<>();
     @DocumentReference //This makes the database store only the ids of the comments and the comments themselves will be stored in a separate collection
     private List<Item> registry;
     private List<String> invited;

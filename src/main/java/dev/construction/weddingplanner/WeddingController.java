@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 // import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 
 @RestController
 @RequestMapping("/api/v1/weddings")
@@ -24,6 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class WeddingController {
     @Autowired
     private WeddingService weddingService;
+
+    @Autowired
+    private UserService userService;
 
     // @PostMapping
     // public ResponseEntity<Wedding> createWedding(@RequestBody Map<String, String> payload) {
@@ -41,6 +47,28 @@ public class WeddingController {
     public ResponseEntity<Wedding> createWedding(@RequestBody Map<String, String> payload) {
         return new ResponseEntity<Wedding>(weddingService.createWedding(payload.get("weddingId"), payload.get("weddingTitle"), payload.get("dateTime"), payload.get("location"), payload.get("maxAttendees")), HttpStatus.CREATED);
         // return new ResponseEntity<Wedding>(weddingService.createWedding("weddingId", "weddingTitle", "dateTime", "location", "maxAtt"), HttpStatus.CREATED);
+
+    }
+    
+    //RSVP to a wedding
+    @PostMapping("/{weddingId}/rsvp")
+    public ResponseEntity<String> rsvpToWedding(@PathVariable String weddingId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        
+        Optional<User> userOptional = userService.findUserByName(username);
+        
+        if (userOptional.isEmpty()){
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        User user = userOptional.get();
+
+        boolean rsvpSuccess = weddingService.rsvpToWedding(weddingId, user);
+        if (rsvpSuccess){
+            return new ResponseEntity<>("RSVP successful!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("RSVP failed or already registered.", HttpStatus.BAD_REQUEST);
+        }
 
     }
 }

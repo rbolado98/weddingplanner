@@ -32,4 +32,27 @@ public class WeddingService {
         mongoTemplate.insert(wedding, "weddings");
         return wedding;
     }
+
+    public boolean rsvpToWedding(String weddingId, User user){
+        Optional<Wedding> weddingOptional = weddingRepository.findWeddingByWeddingId(weddingId);
+        Wedding wedding = weddingOptional.get();
+
+        if (weddingOptional.isPresent()){
+            // wedding = weddingOptional.get();
+            int maxAttendees = Integer.parseInt(wedding.getMaxAttendees());
+
+            // Check if the user is already an attendee or in the waitlist
+            if (wedding.getAttendees().contains(user)) return false;
+            if (wedding.getWaitlist().contains(user.getId().toHexString())) return false;
+
+            if(wedding.getAttendees().size() < maxAttendees){
+                wedding.getAttendees().add(user);
+            } else {
+                wedding.getWaitlist().add(user.getId().toHexString());
+            }
+
+        }
+        weddingRepository.save(wedding);
+        return true;
+    } 
 }

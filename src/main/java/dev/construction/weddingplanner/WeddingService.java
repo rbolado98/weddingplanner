@@ -21,14 +21,8 @@ public class WeddingService {
         return weddingRepository.findWeddingByWeddingId(WeddingId);
     }
 
-    public Wedding createWedding(String weddingId, String weddingTitle, String dateTime, String location, String maxAttendees) {
-        Wedding wedding = new Wedding(weddingId, weddingTitle, dateTime, location, maxAttendees);
-        mongoTemplate.insert(wedding, "weddings");
-        return wedding;
-    }
-
-    public Wedding createWeddingAll(String weddingId, String weddingTitle, String dateTime, String location, User createdBy, String maxAttendees, List<String> waitlist, List<String> invited) {
-        Wedding wedding = new Wedding(weddingId, weddingTitle, dateTime, location, createdBy, maxAttendees, waitlist, invited);
+    public Wedding createWedding(String weddingTitle, String dateTime, String location, String maxAttendees) {
+        Wedding wedding = new Wedding(weddingTitle, dateTime, location, maxAttendees);
         mongoTemplate.insert(wedding, "weddings");
         return wedding;
     }

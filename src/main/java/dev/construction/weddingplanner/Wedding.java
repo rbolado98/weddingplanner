@@ -35,12 +35,18 @@ public class Wedding {
     @DocumentReference //This makes the database store only the ids of the comments and the comments themselves will be stored in a separate collection
     private List<Comment> commentIds;
 
-    public Wedding(String weddingId, String weddingTitle, String dateTime, String location, String maxAttendees) {
-        this.weddingId = weddingId;
+    public Wedding(String weddingTitle, String dateTime, String location, String maxAttendees) {
+        this.weddingId = new String (generateRandomId());
         this.weddingTitle = weddingTitle;
         this.dateTime = dateTime;
         this.location = location;
+        this.createdBy = createdBy;
+        this.attendees = new ArrayList<User>();
         this.maxAttendees = maxAttendees;
+        this.waitlist = new ArrayList<String>();
+        this.registry = new ArrayList<Item>();
+        this.invited = new ArrayList<String>();
+        this.commentIds = new ArrayList<Comment>();
     }
     public Wedding(String weddingId, String weddingTitle, String dateTime, String location, User user, String maxAttendees) {
         this.weddingId = weddingId;
@@ -50,18 +56,9 @@ public class Wedding {
         this.createdBy = user;
         this.maxAttendees = maxAttendees;
     }
-
-    public Wedding(String weddingId, String weddingTitle, String dateTime, String location, User createdBy, String maxAttendees, List<String> waitlist, List<String> invited) {
-        this.weddingId = weddingId;
-        this.weddingTitle = weddingTitle;
-        this.dateTime = dateTime;
-        this.location = location;
-        this.createdBy = createdBy;
-        this.attendees = new ArrayList<User>();
-        this.maxAttendees = maxAttendees;
-        this.waitlist = waitlist;
-        this.registry = new ArrayList<Item>();
-        this.invited = invited;
-        this.commentIds = new ArrayList<Comment>();
+    private String generateRandomId() {
+        char letter = (char) ('A' + Math.random() * 26);
+        int number = (int) (Math.random() * 1000);
+        return String.format("%c%03d", letter, number);
     }
 }

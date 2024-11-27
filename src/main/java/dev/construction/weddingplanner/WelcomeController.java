@@ -110,6 +110,15 @@ public class WelcomeController {
             return "index"; // Return to login page with error message
         }
     }
+    
+    @Autowired
+    private WeddingService weddingService;
+    @PostMapping("/createwedding")
+    public String createWedding(@RequestParam String weddingTitle, @RequestParam String location, @RequestParam String dateTime, @RequestParam String maxAttendees) {
+        weddingService.createWedding(weddingTitle, dateTime, location, maxAttendees);
+        return "redirect:/myevents";
+        // return new ResponseEntity<Wedding>(weddingService.createWedding("weddingId", "weddingTitle", "dateTime", "location", "maxAtt"), HttpStatus.CREATED);
+    }
 
     // Route for the Signup Page (signup.html)
     @PostMapping("/createuser")

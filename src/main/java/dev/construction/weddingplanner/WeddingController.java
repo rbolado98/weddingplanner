@@ -41,7 +41,7 @@ public class WeddingController {
     @PostMapping("/createwedding")
     public ResponseEntity<Wedding> createWedding(@RequestParam String weddingTitle, @RequestParam String location, @RequestParam String dateTime, @RequestParam String maxAttendees) {
         return new ResponseEntity<Wedding>(weddingService.createWedding(weddingTitle, dateTime, location, maxAttendees), HttpStatus.CREATED);
-        // return new ResponseEntity<Wedding>(weddingService.createWedding("weddingId", "weddingTitle", "dateTime", "location", "maxAtt"), HttpStatus.CREATED);
 
     }
+
 }

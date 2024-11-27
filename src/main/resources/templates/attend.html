@@ -140,12 +140,15 @@
         <!-- Wedding Lookup Form -->
         <div class="form-section">
             <h2>Wedding Search</h2>
-            <form action="/attend" method="GET">
+            <form action="/attendwedding" method="POST">
                 <div class="form-group">
                     <label for="weddingId">Enter Wedding ID:</label>
                     <input type="text" id="weddingId" name="weddingId" placeholder="e.g., 12345" required>
+                    <label for="email">Enter your email:</label>
+                    <input type="text" id="email" name="email" placeholder="e.g., youremail@example.com">
                 </div>
-                <button type="submit">Search</button>
+                <button type="submit">RSVP: Yes</button>
+                <button href="/myevents" class="button">RSVP: No</button>
             </form>
         </div>
         <a> </a>

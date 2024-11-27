@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,5 +27,16 @@ public class WeddingService {
         Wedding wedding = new Wedding(weddingTitle, dateTime, location, maxAttendees);
         mongoTemplate.insert(wedding, "weddings");
         return wedding;
+    }
+
+    @Autowired
+    private UserRepository userRepository;
+    public User attendWedding(String weddingId, String userEmail) {
+        User user = userRepository.findUserByEmail(userEmail).get();
+        mongoTemplate.update(Wedding.class)
+            .matching(Criteria.where("weddingId").is(weddingId))
+            .apply(new Update().push("attendees").value(user))
+            .first();
+        return user;
     }
 }

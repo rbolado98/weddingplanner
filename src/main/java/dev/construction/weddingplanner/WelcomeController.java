@@ -118,6 +118,11 @@ public class WelcomeController {
         return "redirect:/myevents";
         // return new ResponseEntity<Wedding>(weddingService.createWedding("weddingId", "weddingTitle", "dateTime", "location", "maxAtt"), HttpStatus.CREATED);
     }
+    @PostMapping("/attendwedding")
+    public String attendWedding(@RequestParam String weddingId, @RequestParam String email) {
+        weddingService.attendWedding(weddingId, email);
+        return "redirect:/myevents";
+    }
 
     // Route for the Signup Page (signup.html)
     @PostMapping("/createuser")

@@ -95,7 +95,7 @@ public class WelcomeController {
     // Handle login form submission
     @Autowired
     private UserService userService;
-    @PostMapping("/login")
+    @PostMapping("/validateUser")
     public String handleLogin(@RequestParam String email, @RequestParam String password, Model model) {
         if (userService.authenticate(email, password)) {
             model.addAttribute("email", email);

@@ -43,8 +43,8 @@ public class WelcomeController {
     }
 
     // Route for the Lookup Page (lookup.html)
-    @GetMapping("/lookup")
-    public String showLookupPage() {
-        return "lookup"; // Matches lookup.html in the templates folder
+    @GetMapping("/attend")
+    public String showAttendPage() {
+        return "attend"; // Matches attend.html in the templates folder
     }
 }

@@ -49,7 +49,6 @@ public class WelcomeController {
             // System.out.println(response.body());
             weddingarray = new JSONArray(response.body());
             for (int i = 0; i < weddingarray.length(); i++) {
-                System.out.println(i);
                 JSONObject wedding = weddingarray.getJSONObject(i);
                 /*
                  *  "createdBy": {

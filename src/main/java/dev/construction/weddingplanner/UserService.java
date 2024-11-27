@@ -33,6 +33,11 @@ public class UserService {
         }
         return false;
     }
+
+    public boolean checkIfUserExists(String email) {
+        Optional<User> user = findUserByEmail(email);
+        return user.isPresent();
+    }
     // public User validateUser(String email, String password) {
     //     return mongoTemplate
     // }

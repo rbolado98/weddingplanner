@@ -92,6 +92,11 @@ public class WelcomeController {
     public String showLoginPage() {
         return "index"; // Matches index.html in the templates folder
     }
+
+    @GetMapping("/signup")
+    public String showSignupPage() {
+        return "signup"; // Matches signup.html in the templates folder
+    }
     // Handle login form submission
     @Autowired
     private UserService userService;
@@ -107,8 +112,15 @@ public class WelcomeController {
     }
 
     // Route for the Signup Page (signup.html)
-    @GetMapping("/signup")
-    public String showSignUpPage() {
+    @PostMapping("/createuser")
+    public String handleSignup(@RequestParam String name, @RequestParam String email, @RequestParam String password, Model model) {
+        if (userService.checkIfUserExists(email)) {
+            model.addAttribute("error", "User already exists");
+        } else {
+            userService.createUser(name, email, password);
+            model.addAttribute("email", email);
+            return "redirect:/profile"; // Redirect to profile page on successful signup
+        }
         return "signup"; // Matches signup.html in the templates folder
     }
 

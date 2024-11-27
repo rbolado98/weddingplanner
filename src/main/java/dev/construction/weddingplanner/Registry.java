@@ -23,13 +23,6 @@ public class Registry {
         this.items = new ArrayList<>();
     }
 
-    // Add an item to the registry
-    // public void addItem(String name, String purchaseLink) {
-    //     Item newItem = new Item(name, purchaseLink);
-    //     items.add(newItem);
-    //     System.out.println("Item added: " + newItem);
-    // }
-
     // Remove an item by name
     public void removeItem(String name) {
         //items.removeIf(item -> item.getName().equalsIgnoreCase(name));

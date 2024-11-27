@@ -101,27 +101,19 @@
         <p>Enter the details of your wedding event below.</p>
     </header>
     <main>
-        <form class="event-form">
+        <form action="/createwedding" method="POST" class="event-form">
             <h2>Create Event</h2>
             <div class="form-group">
-                <label for="eventTitle">Event Title:</label>
-                <input type="text" id="eventTitle" name="eventTitle" placeholder="e.g., Dream Wedding" required>
+                <label for="weddingTitle">Wedding Title:</label>
+                <input type="text" id="weddingTitle" name="weddingTitle" placeholder="e.g., Dream Wedding" required>
             </div>
             <div class="form-group">
-                <label for="eventId">Event ID:</label>
-                <input type="text" id="eventId" name="eventId" placeholder="e.g., 12345" required>
+                <label for="locaction">Location:</label>
+                <input type="text" id="location" name="location" placeholder="e.g., Central Park, NYC" required>
             </div>
             <div class="form-group">
-                <label for="eventDateTime">Date and Time:</label>
-                <input type="datetime-local" id="eventDateTime" name="eventDateTime" required>
-            </div>
-            <div class="form-group">
-                <label for="eventLocation">Location:</label>
-                <input type="text" id="eventLocation" name="eventLocation" placeholder="e.g., Central Park, NYC" required>
-            </div>
-            <div class="form-group">
-                <label for="createdBy">Created By:</label>
-                <input type="text" id="createdBy" name="createdBy" placeholder="e.g., John Doe" required>
+                <label for="dateTime">Date and Time:</label>
+                <input type="datetime-local" id="dateTime" name="dateTime" required>
             </div>
             <div class="form-group">
                 <label for="maxAttendees">Max Attendees:</label>

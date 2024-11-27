@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f6f2;
+            color: #4b4b4b;
+        }
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #eae4d3;
+            color: #4b4b4b;
+            border-bottom: 2px solid #d2c7b5;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: normal;
+        }
+        header p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #6c6c6c;
+        }
+        main {
+            padding: 50px 20px;
+        }
+        .profile-details, .event-list {
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-details h2, .event-list h2 {
+            margin-top: 0;
+            color: #4b4b4b;
+        }
+        .profile-details p, .event-item p {
+            font-size: 1rem;
+            margin: 10px 0;
+            color: #4b4b4b;
+        }
+        .profile-details span, .event-item span {
+            font-weight: bold;
+        }
+        .event-item {
+            border-bottom: 1px solid #d2c7b5;
+            padding: 10px 0;
+        }
+        .event-item:last-child {
+            border-bottom: none;
+        }
+        .rsvp-status {
+            font-weight: bold;
+            color: #4CAF50; /* Green for accepted by default */
+        }
+        .rsvp-status.declined {
+            color: #E53935; /* Red for declined */
+        }
+        .rsvp-status.pending {
+            color: #FFC107; /* Yellow for pending */
+        }
+        .button {
+            display: inline-block;
+            margin: 20px 10px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            color: white;
+            background-color: #a19078;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-family: 'Arial', sans-serif;
+        }
+        .button:hover {
+            background-color: #8c7a62;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #eae4d3;
+            color: #6c6c6c;
+            border-top: 2px solid #d2c7b5;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Profile</h1>
+        <p>View and manage your account details.</p>
+    </header>
+    <main>
+        <div class="profile-details">
+            <h2>Profile Information</h2>
+            <p><span>ID:</span> 64a1c09f1a2e7c001c58b0d3</p>
+            <p><span>User ID:</span> user12345</p>
+            <p><span>Name:</span> John Doe</p>
+            <p><span>Email:</span> johndoe@example.com</p>
+            <p><span>Admin:</span> No</p>
+        </div>
+        <!-- <div class="event-list">
+            <h2>Current Events RSVPd For</h2>
+            <div class="event-item">
+                <p><span>Wedding Title:</span> Elegant Winter Wedding</p>
+                <p><span>Date & Time:</span> December 15, 2024, at 5:00 PM</p>
+                <p><span>Location:</span> The Grand Ballroom, NYC</p>
+                <p><span>RSVP Status:</span> <span class="rsvp-status">Accepted</span></p>
+            </div>
+            <div class="event-item">
+                <p><span>Wedding Title:</span> Spring Garden Party</p>
+                <p><span>Date & Time:</span> March 20, 2025, at 2:00 PM</p>
+                <p><span>Location:</span> Rosewood Park, LA</p>
+                <p><span>RSVP Status:</span> <span class="rsvp-status declined">Declined</span></p>
+            </div>
+            <div class="event-item">
+                <p><span>Wedding Title:</span> Summer Beach Celebration</p>
+                <p><span>Date & Time:</span> June 10, 2025, at 4:00 PM</p>
+                <p><span>Location:</span> Malibu Shores, CA</p>
+                <p><span>RSVP Status:</span> <span class="rsvp-status pending">Pending</span></p>
+            </div>
+        </div> -->
+        <div class="event-list">
+            <h2>Current Events RSVPd For</h2>
+            <div class="event-item" th:each="wedding : ${weddings}">
+                <p><span>Wedding Title:</span> <span th:text="${wedding.weddingTitle}"></span></p>
+                <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
+                <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
+                <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
+            </div>
+        </div>
+        <a href="/" class="button">Back to Home</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 Wedding Planner App. Designed with elegance and care.</p>
+    </footer>
+</body>
+</html>

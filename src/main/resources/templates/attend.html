@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attend Wedding</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f6f2;
+            color: #4b4b4b;
+        }
+        .button {
+            display: inline-block;
+            margin: 20px 10px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            color: white;
+            background-color: #a19078;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-family: 'Arial', sans-serif;
+        }
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #eae4d3;
+            color: #4b4b4b;
+            border-bottom: 2px solid #d2c7b5;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: normal;
+        }
+        header p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #6c6c6c;
+        }
+        main {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-section {
+            margin-bottom: 30px;
+        }
+        .form-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 1rem;
+            color: #6c6c6c;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: white;
+            background-color: #a19078;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #8c7a62;
+        }
+        .wedding-details {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background-color: #eae4d3;
+        }
+        .item-name {
+            font-weight: bold;
+        }
+        .price {
+            color: #6c6c6c;
+        }
+        .retailer a {
+            color: #a19078;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .retailer a:hover {
+            color: #8c7a62;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #eae4d3;
+            color: #6c6c6c;
+            border-top: 2px solid #d2c7b5;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Wedding Information Lookup</h1>
+        <p>Search for wedding details by entering the Wedding ID.</p>
+    </header>
+    <main>
+        <!-- Wedding Lookup Form -->
+        <div class="form-section">
+            <h2>RSVP to a Wedding</h2>
+            <form action="/attendwedding" method="POST">
+                <div class="form-group">
+                    <label for="weddingId">Enter Wedding ID:</label>
+                    <input type="text" id="weddingId" name="weddingId" placeholder="e.g., 12345" required>
+                    <label for="email">Confirm your email:</label>
+                    <input type="text" id="email" name="email" placeholder="e.g., youremail@example.com">
+                </div>
+                <button type="submit">RSVP: Yes</button>
+                <button href="/myevents" class="button">RSVP: No</button>
+            </form>
+        </div>
+        <a> </a>
+        <a href="/myevents" class="button">Go to my Events</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 Wedding Planner App. Designed with elegance and care.</p>
+    </footer>
+    
+</body>
+</html>

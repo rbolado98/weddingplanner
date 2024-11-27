@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +19,33 @@
             color: #4b4b4b;
             border-bottom: 2px solid #d2c7b5;
         }
+        .profile-details, .event-list {
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-details h2, .event-list h2 {
+            margin-top: 0;
+            color: #4b4b4b;
+        }
+        .profile-details p, .event-item p {
+            font-size: 1rem;
+            margin: 10px 0;
+            color: #4b4b4b;
+        }
+        .profile-details span, .event-item span {
+            font-weight: bold;
+        }
+        .event-item {
+            border-bottom: 1px solid #d2c7b5;
+            padding: 10px 0;
+        }
+        .event-item:last-child {
+            border-bottom: none;
+        }
         header h1 {
             margin: 0;
             font-size: 3rem;
@@ -36,6 +63,52 @@
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-section {
+            margin-bottom: 30px;
+        }
+        .form-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 1rem;
+            color: #6c6c6c;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: white;
+            background-color: #a19078;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #8c7a62;
         }
         table {
             width: 100%;
@@ -74,43 +147,71 @@
 <body>
     <header>
         <h1>My Events</h1>
-        <p>Check your RSVP status for upcoming events.</p>
+        <p>Check your RSVP status for upcoming events or respond to an invite.</p>
     </header>
     <main>
-        <h2>RSVP Status</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Event Name</th>
-                    <th>Location</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Dream Wedding</td>
-                    <td>Central Park, NYC</td>
-                    <td>12/31/2024</td>
-                    <td class="status-accepted">Accepted</td>
-                </tr>
-                <tr>
-                    <td>Summer Gala</td>
-                    <td>Beachside Resort</td>
-                    <td>07/15/2024</td>
-                    <td class="status-declined">Declined</td>
-                </tr>
-                <tr>
-                    <td>Winter Wonderland</td>
-                    <td>Snowy Mountains</td>
-                    <td>01/10/2025</td>
-                    <td class="status-pending">Awaiting Response</td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Wedding ID Search and RSVP Section
+        <form onsubmit="return sendConfirmation(event)">
+            <div class="form-group">
+                <label for="weddingId">Enter Wedding ID:</label>
+                <input type="text" id="weddingId" name="weddingId" placeholder="e.g., 12345" required>
+            </div>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" id="accept" name="response" value="accept">
+                    Accept Invite
+                </label>
+            </div>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" id="decline" name="response" value="decline">
+                    Decline Invite
+                </label>
+            </div>
+            <button type="submit">Submit RSVP</button>
+        </form> -->
+
+
+        <div class="event-list">
+            <h2>Current Events RSVPd For</h2>
+            <div class="event-item" th:each="wedding : ${weddings}">
+                <p><a th:href="@{'/api/v1/weddings/' + ${wedding.weddingId}}" th:text="${wedding.weddingTitle}"></a></p>
+                <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
+                <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
+                <p><span>Attendees:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
+            </div>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 Wedding Planner App. Designed with elegance and care.</p>
     </footer>
+
+    <script>
+        function sendConfirmation(event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+    
+            const acceptChecked = document.getElementById('accept').checked;
+            const declineChecked = document.getElementById('decline').checked;
+            const weddingId = document.getElementById('weddingId').value;
+    
+            if (!weddingId) {
+                alert('Please enter a Wedding ID.');
+                return false; // Stop further execution
+            }
+    
+            if (acceptChecked) {
+                alert(`Thank you! You have accepted the invite for Wedding ID: ${weddingId}.`);
+            } else if (declineChecked) {
+                alert(`You have declined the invite for Wedding ID: ${weddingId}.`);
+            } else {
+                alert('Please select an RSVP option (Accept or Decline).');
+                return false; // Stop further execution
+            }
+    
+            // No redirection or further action
+            return false;
+        }
+    </script>
 </body>
 </html>

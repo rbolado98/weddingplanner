@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 // import org.springframework.web.bind.annotation.PostMapping;
 // import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 
 
 @RestController
@@ -70,5 +72,30 @@ public class WeddingController {
             return new ResponseEntity<>("RSVP failed or already registered.", HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+// Retrieves the wedding details using the wedding id.
+    @GetMapping("/wedding/{id}")
+    public String getWeddingDetails(@PathVariable String id, Model model) {
+        Optional<Wedding> wedding = weddingService.singleWedding(id);
+
+        if (wedding.isPresent()){
+            model.addAttribute("wedding", wedding.get());
+            return "weddingDetails";
+        } else {
+            return "error";
+        }
+    }
+
+    @PostMapping("/{id}/registry/addItem")
+    public ResponseEntity<String> addItemToRegistry(@PathVariable String id, @PathVariable String itemName, @RequestParam int quantity){
+        boolean added = weddingService.addItemToRegistry(id, itemName, quantity);
+
+        if(added) {
+            return new ResponseEntity<>("Item added to registry!", HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Failed to add item to registry.", HttpStatus.BAD_REQUEST);
+        }
     }
 }

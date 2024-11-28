@@ -24,11 +24,11 @@ public class Registry {
     }
 
     // Add an item to the registry
-    // public void addItem(String name, String purchaseLink) {
-    //     Item newItem = new Item(name, purchaseLink);
-    //     items.add(newItem);
-    //     System.out.println("Item added: " + newItem);
-    // }
+    public void addItem(String name, String purchaseLink) {
+        Item newItem = new Item(name, purchaseLink);
+        items.add(newItem);
+        System.out.println("Item added: " + newItem);
+    }
 
     // Remove an item by name
     public void removeItem(String name) {

@@ -55,4 +55,17 @@ public class WeddingService {
         weddingRepository.save(wedding);
         return true;
     } 
+
+    public boolean addItemToRegistry(String weddingId, String itemName, int quantity){
+        Optional<Wedding> weddingOptional = weddingRepository.findWeddingByWeddingId(weddingId);
+
+        if (weddingOptional.isPresent()){
+            Wedding wedding = weddingOptional.get();
+            RegistryItem newItem = new RegistryItem(itemName, quantity);
+            wedding.getRegistry().add(newItem);
+            weddingRepository.save(wedding);
+            return true;
+        }
+        return false;
+    }
 }

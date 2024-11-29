@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,5 +39,17 @@ public class WeddingService {
             .apply(new Update().push("attendees").value(user))
             .first();
         return user;
+    }
+    public List<Item> getRegistry(String weddingId) {
+        // Find the Wedding document by weddingId
+        Wedding wedding = mongoTemplate.findOne(Query.query(Criteria.where("weddingId").is(weddingId)), Wedding.class);
+
+        // If no wedding is found, throw an exception
+        if (wedding == null) {
+            throw new IllegalArgumentException("Wedding not found with ID: " + weddingId);
+        }
+
+        // Return the resolved registry (List<Item>)
+        return wedding.getRegistry();
     }
 }

@@ -61,4 +61,7 @@ public class Wedding {
         int number = (int) (Math.random() * 1000);
         return String.format("%c%03d", letter, number);
     }
+    public List<Item> getRegistry() {
+        return registry;
+    }
 }

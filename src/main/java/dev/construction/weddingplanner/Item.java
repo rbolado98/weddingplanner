@@ -17,7 +17,7 @@ public class Item {
     private ObjectId id;
     private String name;
     private String link;
-
+    // private boolean purchased;
 
 
     public Item(String name){

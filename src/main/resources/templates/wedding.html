@@ -105,24 +105,27 @@
     </header>
     <main>
         
-        <!-- <div class="event-list">
-            <h2>Current Events RSVPd For</h2>
-            <div class="event-item" th:each="wedding : ${weddings}">
-                <p><span>Wedding Title:</span> <span th:text="${wedding.weddingTitle}"></span></p>
-                <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
-                <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
-                <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
-            </div>
-        </div> -->
         <div class="event-list">
             <h2>Wedding Details</h2>
             <div class="event-item">
                 <p><span>Wedding Title:</span> <span th:text="${wedding.weddingTitle}"></span></p>
                 <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
                 <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
+                <p><span>Wedding ID:</span><span th:text="${wedding.weddingId}"></span></p>
                 <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
             </div>
-            <form action="/api/v1/items" method="POST">
+            <!-- <h3>Registry:</h3>
+            <div class="event-item" th:each="wedding : ${weddings}">
+                <h3><span th:text="${wedding.weddingTitle}"></span></h3>
+                <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
+                <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
+                <p><span>Attendees:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
+                <form th:action="@{/wedding}" method="GET">
+                    <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
+                    <button type="submit">View</button>
+                </form>
+            </div> -->
+            <form id="registryForm" action="/api/v1/items" method="POST">
                 <div class="form-group">
                     <label for="name">Gift:</label>
                     <input type="text" id="name" name="name" placeholder="e.g. Toaster" required>
@@ -134,6 +137,8 @@
                 <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
                 <button type="submit" class="signup-button">Create</button>
             </form>
+            
+            
         </div>
 
         <a href="/" class="button">Back to Home</a>
@@ -141,5 +146,34 @@
     <footer>
         <p>&copy; 2024 Wedding Planner App. Designed with elegance and care.</p>
     </footer>
+
+    <script>
+        document.getElementById('registryForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the default form submission
+    
+            // Gather form data
+            const formData = new FormData(this);
+    
+            try {
+                // Send POST request to the server
+                const response = await fetch(this.action, {
+                    method: this.method,
+                    body: formData
+                });
+    
+                if (response.ok) {
+                    // Reload the page if the response is successful
+                    alert('Registry item created successfully!');
+                    location.reload(); // Reload the current page
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.message}`);
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    </script>
 </body>
 </html>

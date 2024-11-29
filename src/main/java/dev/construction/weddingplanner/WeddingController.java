@@ -1,8 +1,6 @@
 package dev.construction.weddingplanner;
 
 import java.util.List;
-import java.util.Map;
-// import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +10,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-// import org.springframework.web.bind.annotation.PostMapping;
-// import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +36,6 @@ public class WeddingController {
     @PostMapping("/createwedding")
     public ResponseEntity<Wedding> createWedding(@RequestParam String weddingTitle, @RequestParam String location, @RequestParam String dateTime, @RequestParam String maxAttendees) {
         return new ResponseEntity<Wedding>(weddingService.createWedding(weddingTitle, dateTime, location, maxAttendees), HttpStatus.CREATED);
-
     }
 
 }

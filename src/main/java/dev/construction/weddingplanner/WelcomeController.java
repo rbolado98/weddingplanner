@@ -212,72 +212,97 @@ public class WelcomeController {
     }
 
 
-
     @GetMapping("/wedding")
-    public String showWeddingPage(Model model, @RequestParam String weddingId) {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/v1/weddings/" + weddingId))
-                .build();
-        Wedding wedding = null;
-        try{
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            JSONObject weddingobject = new JSONObject(response.body());
-            User user = null;
-                if(weddingobject.get("createdBy").equals("null")){
-                    System.out.println(weddingobject.get("createdBy"));
-                    JSONObject userobject = weddingobject.getJSONObject("createdBy");
-                    user = new User(
-                        userobject.getString("name"),
-                        userobject.getString("email"),
-                        userobject.getString("password"),
-                        userobject.getBoolean("admin")
-                    );
-                }
-            wedding = new Wedding(weddingobject.getString("weddingId"), 
-                    weddingobject.getString("weddingTitle"), 
-                    weddingobject.getString("dateTime"), 
-                    weddingobject.getString("location"), 
-                    user,
-                    weddingobject.getString("maxAttendees"));
-        } 
-        catch (Exception e){
-            System.out.println("Error: " + e);
+public String showWeddingPage(Model model, @RequestParam String weddingId) {
+    HttpClient client = HttpClient.newHttpClient();
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://localhost:8080/api/v1/weddings/" + weddingId))
+            .build();
+    Wedding wedding = null;
+    List<Item> registry = new ArrayList<>();
+
+    try {
+        // Fetch wedding details
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        JSONObject weddingObject = new JSONObject(response.body());
+
+        User user = null;
+        if (!weddingObject.get("createdBy").equals("null")) {
+            JSONObject userObject = weddingObject.getJSONObject("createdBy");
+            user = new User(
+                    userObject.getString("name"),
+                    userObject.getString("email"),
+                    userObject.getString("password"),
+                    userObject.getBoolean("admin")
+            );
         }
-        model.addAttribute("wedding", wedding);
-        return "wedding";
 
-        // List<Wedding> weddings = new ArrayList<Wedding>();
-        // try{
-        //     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        //     weddingarray = new JSONArray(response.body());
-        //     for (int i = 0; i < weddingarray.length(); i++) {
-        //         JSONObject wedding = weddingarray.getJSONObject(i);
+        wedding = new Wedding(
+                weddingObject.getString("weddingId"),
+                weddingObject.getString("weddingTitle"),
+                weddingObject.getString("dateTime"),
+                weddingObject.getString("location"),
+                user,
+                weddingObject.getString("maxAttendees")
+        );
 
-        //         User user = null;
-        //         if(wedding.get("createdBy").equals("null")){
-        //             System.out.println(wedding.get("createdBy"));
-        //             JSONObject userobject = wedding.getJSONObject("createdBy");
-        //             user = new User(
-        //                 userobject.getString("name"),
-        //                 userobject.getString("email"),
-        //                 userobject.getString("password"),
-        //                 userobject.getBoolean("admin")
-        //             );
-        //         }
-        //         weddings.add(
-        //             new Wedding(wedding.getString("weddingId"), 
-        //             wedding.getString("weddingTitle"), 
-        //             wedding.getString("dateTime"), 
-        //             wedding.getString("location"), 
-        //             user,
-        //             wedding.getString("maxAttendees")));
-        //     }
-        // }
-        // catch (Exception e){
-        //     System.out.println("Error: " + e);
-        // }
-        // model.addAttribute("weddings", weddings);
-        // return "wedding"; // Matches profile.html in the templates folder
+        // Fetch registry items for the wedding
+        HttpRequest registryRequest = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/v1/items" + weddingId))
+                .build();
+        HttpResponse<String> registryResponse = client.send(registryRequest, HttpResponse.BodyHandlers.ofString());
+        JSONArray registryArray = new JSONArray(registryResponse.body());
+        // Map registry items to Item objects
+        for (int i = 0; i < registryArray.length(); i++) {
+            JSONObject itemObject = registryArray.getJSONObject(i);
+            registry.add(new Item(
+                    itemObject.getString("name"),
+                    itemObject.getString("link")
+            ));
+        }
+
+    } catch (Exception e) {
+        System.out.println("Error: " + e);
     }
+
+    // Add wedding and registry to the model
+    model.addAttribute("wedding", wedding);
+    model.addAttribute("registry", registry);
+    return "wedding"; // Matches wedding.html in the templates folder
+}
+
+    // @GetMapping("/wedding")
+    // public String showWeddingPage(Model model, @RequestParam String weddingId) {
+    //     HttpClient client = HttpClient.newHttpClient();
+    //     HttpRequest request = HttpRequest.newBuilder()
+    //             .uri(URI.create("http://localhost:8080/api/v1/weddings/" + weddingId))
+    //             .build();
+    //     Wedding wedding = null;
+    //     try{
+    //         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    //         JSONObject weddingobject = new JSONObject(response.body());
+    //         User user = null;
+    //             if(weddingobject.get("createdBy").equals("null")){
+    //                 System.out.println(weddingobject.get("createdBy"));
+    //                 JSONObject userobject = weddingobject.getJSONObject("createdBy");
+    //                 user = new User(
+    //                     userobject.getString("name"),
+    //                     userobject.getString("email"),
+    //                     userobject.getString("password"),
+    //                     userobject.getBoolean("admin")
+    //                 );
+    //             }
+    //         wedding = new Wedding(weddingobject.getString("weddingId"), 
+    //                 weddingobject.getString("weddingTitle"), 
+    //                 weddingobject.getString("dateTime"), 
+    //                 weddingobject.getString("location"), 
+    //                 user,
+    //                 weddingobject.getString("maxAttendees"));
+    //     } 
+    //     catch (Exception e){
+    //         System.out.println("Error: " + e);
+    //     }
+    //     model.addAttribute("wedding", wedding);
+    //     return "wedding";
+    // }
 }

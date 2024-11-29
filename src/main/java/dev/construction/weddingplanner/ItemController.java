@@ -18,7 +18,7 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
     @PostMapping
-    public ResponseEntity<Item> createItem(@RequestParam String name, @RequestParam String link, @RequestParam String weddingId) {
+    public ResponseEntity<Item> createItemInWed(@RequestParam String name, @RequestParam String link, @RequestParam String weddingId) {
         return new ResponseEntity<Item>(itemService.createItem(name, link, weddingId), HttpStatus.CREATED);
     }
 }

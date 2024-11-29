@@ -206,6 +206,11 @@ public class WelcomeController {
         return "attend"; // Matches attend.html in the templates folder
     }
 
+    @GetMapping("/EventPlanner")
+    public String showEventPlannerPage() {
+        return "EventPlanner"; // Matches EventPlanner.html in the templates folder
+    }
+
 
 
     @GetMapping("/wedding")

@@ -36,4 +36,8 @@ public class ItemController {
     public ResponseEntity<List<Item>> getItemsById(@PathVariable String WeddingId) {
         return new ResponseEntity<List<Item>>(itemService.getItemsByWeddingId(WeddingId), HttpStatus.OK);
     }
+    // @GetMapping("/{WeddingId}")
+    // public ResponseEntity<List<Item>> getItemsById(@RequestBody Map<String, String> payload) {
+    //     return new ResponseEntity<List<Item>>(itemService.getItemsByWeddingId(payload.get("WeddingId")), HttpStatus.OK);
+    // }
 }

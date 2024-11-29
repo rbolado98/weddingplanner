@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpSession;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -50,15 +52,6 @@ public class WelcomeController {
             weddingarray = new JSONArray(response.body());
             for (int i = 0; i < weddingarray.length(); i++) {
                 JSONObject wedding = weddingarray.getJSONObject(i);
-                /*
-                 *  "createdBy": {
-                    "id": null,
-                    "name": "John Doe",
-                    "email": "john.doe@example.com",
-                    "password": "Password123",
-                    "admin": true
-                },
-                 */
                 User user = null;
                 if(wedding.get("createdBy").equals("null")){
                     System.out.println(wedding.get("createdBy"));
@@ -100,10 +93,11 @@ public class WelcomeController {
     @Autowired
     private UserService userService;
     @PostMapping("/validateUser")
-    public String handleLogin(@RequestParam String email, @RequestParam String password, Model model) {
+    public String handleLogin(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
         if (userService.authenticate(email, password)) {
             model.addAttribute("email", email);
-            return "redirect:/profile"; // Redirect to profile page on successful login
+            session.setAttribute("loggedInUser", email);
+            return "redirect:/"; // Redirect to profile page on successful login
         } else {
             model.addAttribute("error", "Invalid email or password");
             return "index"; // Return to login page with error message
@@ -219,8 +213,6 @@ public String showWeddingPage(Model model, @RequestParam String weddingId) {
             .uri(URI.create("http://localhost:8080/api/v1/weddings/" + weddingId))
             .build();
     Wedding wedding = null;
-    List<Item> registry = new ArrayList<>();
-
     try {
         // Fetch wedding details
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -246,63 +238,37 @@ public String showWeddingPage(Model model, @RequestParam String weddingId) {
                 weddingObject.getString("maxAttendees")
         );
 
-        // Fetch registry items for the wedding
-        HttpRequest registryRequest = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/v1/items" + weddingId))
-                .build();
-        HttpResponse<String> registryResponse = client.send(registryRequest, HttpResponse.BodyHandlers.ofString());
-        JSONArray registryArray = new JSONArray(registryResponse.body());
-        // Map registry items to Item objects
-        for (int i = 0; i < registryArray.length(); i++) {
-            JSONObject itemObject = registryArray.getJSONObject(i);
-            registry.add(new Item(
-                    itemObject.getString("name"),
-                    itemObject.getString("link")
-            ));
-        }
-
+        
     } catch (Exception e) {
         System.out.println("Error: " + e);
     }
-
+    List<Item> registry = new ArrayList<Item>();
+    try{
+        // Fetch registry items for the wedding
+        JSONArray registryArray = null;
+        HttpRequest registryRequest = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/v1/items/" + weddingId))
+                .build();
+            HttpResponse<String> registryResponse = client.send(registryRequest, HttpResponse.BodyHandlers.ofString());
+            System.out.println(registryResponse.body());
+            registryArray = new JSONArray(registryResponse.body());
+            for (int i = 0; i < registryArray.length(); i++) {
+                JSONObject item = registryArray.getJSONObject(i);
+                registry.add(new Item(
+                        item.getString("name"),
+                        item.getString("link")
+                ));
+            }
+    } 
+    catch (Exception e) {
+        System.out.println("Error: " + e);
+    }
+    System.out.println(registry);
     // Add wedding and registry to the model
     model.addAttribute("wedding", wedding);
     model.addAttribute("registry", registry);
     return "wedding"; // Matches wedding.html in the templates folder
 }
 
-    // @GetMapping("/wedding")
-    // public String showWeddingPage(Model model, @RequestParam String weddingId) {
-    //     HttpClient client = HttpClient.newHttpClient();
-    //     HttpRequest request = HttpRequest.newBuilder()
-    //             .uri(URI.create("http://localhost:8080/api/v1/weddings/" + weddingId))
-    //             .build();
-    //     Wedding wedding = null;
-    //     try{
-    //         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-    //         JSONObject weddingobject = new JSONObject(response.body());
-    //         User user = null;
-    //             if(weddingobject.get("createdBy").equals("null")){
-    //                 System.out.println(weddingobject.get("createdBy"));
-    //                 JSONObject userobject = weddingobject.getJSONObject("createdBy");
-    //                 user = new User(
-    //                     userobject.getString("name"),
-    //                     userobject.getString("email"),
-    //                     userobject.getString("password"),
-    //                     userobject.getBoolean("admin")
-    //                 );
-    //             }
-    //         wedding = new Wedding(weddingobject.getString("weddingId"), 
-    //                 weddingobject.getString("weddingTitle"), 
-    //                 weddingobject.getString("dateTime"), 
-    //                 weddingobject.getString("location"), 
-    //                 user,
-    //                 weddingobject.getString("maxAttendees"));
-    //     } 
-    //     catch (Exception e){
-    //         System.out.println("Error: " + e);
-    //     }
-    //     model.addAttribute("wedding", wedding);
-    //     return "wedding";
-    // }
+    
 }

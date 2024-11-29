@@ -114,17 +114,12 @@
                 <p><span>Wedding ID:</span><span th:text="${wedding.weddingId}"></span></p>
                 <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
             </div>
-            <!-- <h3>Registry:</h3>
-            <div class="event-item" th:each="wedding : ${weddings}">
-                <h3><span th:text="${wedding.weddingTitle}"></span></h3>
-                <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
-                <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
-                <p><span>Attendees:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
-                <form th:action="@{/wedding}" method="GET">
-                    <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
-                    <button type="submit">View</button>
-                </form>
-            </div> -->
+            <h3>Registry Items</h3>
+            <div class="event-item" th:each="wedding : ${registry}">
+                <p><span>Item</span> <span th:text="${wedding.name}"></span></p>
+                <p><span>Link:</span> <span th:text="${wedding.link}"></span></p>
+            </div>
+            <h4>Add Registry Item</h4>
             <form id="registryForm" action="/api/v1/items" method="POST">
                 <div class="form-group">
                     <label for="name">Gift:</label>

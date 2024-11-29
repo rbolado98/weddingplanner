@@ -215,7 +215,6 @@ public class WelcomeController {
 
     @GetMapping("/wedding")
     public String showWeddingPage(Model model, @RequestParam String weddingId) {
-        JSONArray weddingarray = null;
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/api/v1/weddings/" + weddingId))

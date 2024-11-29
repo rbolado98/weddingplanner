@@ -122,6 +122,18 @@
                 <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
                 <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
             </div>
+            <form action="/api/v1/items" method="POST">
+                <div class="form-group">
+                    <label for="name">Gift:</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. Toaster" required>
+                </div>
+                <div class="form-group">
+                    <label for="link">Link:</label>
+                    <input type="link" id="link" name="link" placeholder="toaster.com" required>
+                </div>
+                <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
+                <button type="submit" class="signup-button">Create</button>
+            </form>
         </div>
 
         <a href="/" class="button">Back to Home</a>

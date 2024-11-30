@@ -122,7 +122,7 @@
             </div>
             <h3>Invited</h3>
             <div class="event-item" th:each="invitee : ${wedding.invited}">
-                <p><span>Name: </span> <span th:text="${invitee}"></span></p>
+                <p><span th:text="${invitee}"></span></p>
             </div>
             <h4>Invite Someone:</h4>
             <form id="registryForm" action="/api/v1/weddings/addInvited" method="POST">
@@ -135,7 +135,7 @@
             </form>
             <h3>Waitlist</h3>
             <div class="event-item" th:each="waitlistee : ${wedding.waitlist}">
-                <p><span>Name: </span> <span th:text="${waitlistee}"></span></p>
+                <p><span th:text="${waitlistee}"></span></p>
             </div>
             <h4>Add Someone to Waitlist:</h4>
             <form id="waitlistForm" action="/api/v1/weddings/addToWaitlist" method="POST">

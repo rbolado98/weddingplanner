@@ -252,7 +252,17 @@ public class WelcomeController {
                     invitedList,
                     weddingObject.getString("maxAttendees")
             );
-            }else{
+            }
+            List<String> waitlist = new ArrayList<>();
+            if (weddingObject.has("waitlist") && !weddingObject.isNull("waitlist")) {
+                JSONArray waitlistArray = weddingObject.getJSONArray("waitlist");
+                System.out.println("WaitlistArray: " + waitlistArray);
+                for (int i = 0; i < waitlistArray.length(); i++) {
+                    waitlist.add(waitlistArray.getString(i)); // Extract each string
+                }
+                System.out.println("Waitlist: "+ waitlist);
+                wedding.setWaitlist(waitlist);
+            } else{
             wedding = new Wedding(
                     weddingObject.getString("weddingId"),
                     weddingObject.getString("weddingTitle"),

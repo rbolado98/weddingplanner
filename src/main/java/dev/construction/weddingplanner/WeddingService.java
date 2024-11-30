@@ -42,6 +42,13 @@ public class WeddingService {
             .first();
         return weddingRepository.findWeddingByWeddingId(weddingId).get();
     }
+    public Wedding addToWaitlist(String name, String weddingId) {
+        mongoTemplate.update(Wedding.class)
+            .matching(Criteria.where("weddingId").is(weddingId))
+            .apply(new Update().push("waitlist").value(name))
+            .first();
+        return weddingRepository.findWeddingByWeddingId(weddingId).get();
+    }
 
     @Autowired
     private UserRepository userRepository;

@@ -37,6 +37,10 @@ public class WeddingController {
     public ResponseEntity<Wedding> addInvited(@RequestParam String name, @RequestParam String weddingId) {  
         return new ResponseEntity<Wedding>(weddingService.addInvited(name, weddingId), HttpStatus.CREATED);
     }
+    @PostMapping("/addToWaitlist")
+    public ResponseEntity<Wedding> addToWaitlist(@RequestParam String name, @RequestParam String weddingId) {  
+        return new ResponseEntity<Wedding>(weddingService.addToWaitlist(name, weddingId), HttpStatus.CREATED);
+    }
     @GetMapping("/getAttendees/{weddingId}")
     public ResponseEntity<List<User>> getAttendees(@PathVariable String weddingId) {
         return new ResponseEntity<List<User>>(weddingService.singleWedding(weddingId).get().getAttendees(), HttpStatus.OK);

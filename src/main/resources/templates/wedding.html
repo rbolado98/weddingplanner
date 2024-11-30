@@ -111,7 +111,7 @@
                 <p><span>Wedding Title:</span> <span th:text="${wedding.weddingTitle}"></span></p>
                 <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
                 <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
-                <p><span>Wedding ID:</span><span th:text="${wedding.weddingId}"></span></p>
+                <p><span>RSVP Code: </span><span th:text="${wedding.weddingId}"></span></p>
                 <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
             </div>
             <h3>RSVP'd</h3>
@@ -134,9 +134,18 @@
                 <button type="submit" class="signup-button">Invite</button>
             </form>
             <h3>Waitlist</h3>
-            <div class="event-item" th:each="attendee : ${wedding.attendees}">
-                <p><span>Name</span> <span th:text="${attendee.name}"></span></p>
+            <div class="event-item" th:each="waitlistee : ${wedding.waitlist}">
+                <p><span>Name: </span> <span th:text="${waitlistee}"></span></p>
             </div>
+            <h4>Add Someone to Waitlist:</h4>
+            <form id="waitlistForm" action="/api/v1/weddings/addToWaitlist" method="POST">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
+                </div>
+                <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
+                <button type="submit" class="signup-button">Invite</button>
+            </form>
             <h3>Registry Items</h3>
             <div class="event-item" th:each="item : ${registry}">
                 <p><span>Item</span> <span th:text="${item.name}"></span></p>
@@ -165,6 +174,32 @@
 
     <script>
         document.getElementById('registryForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the default form submission
+    
+            // Gather form data
+            const formData = new FormData(this);
+    
+            try {
+                // Send POST request to the server
+                const response = await fetch(this.action, {
+                    method: this.method,
+                    body: formData
+                });
+    
+                if (response.ok) {
+                    // Reload the page if the response is successful
+                    alert('Successfully Added!');
+                    location.reload(); // Reload the current page
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.message}`);
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('An error occurred while submitting the form.');
+            }
+        });
+        document.getElementById('waitlistForm').addEventListener('submit', async function (event) {
             event.preventDefault(); // Prevent the default form submission
     
             // Gather form data

@@ -214,6 +214,7 @@ public class WelcomeController {
     }
 
 
+    @SuppressWarnings("null")
     @GetMapping("/wedding")
     public String showWeddingPage(Model model, @RequestParam String weddingId) {
         HttpClient client = HttpClient.newHttpClient();

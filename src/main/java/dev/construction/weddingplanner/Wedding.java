@@ -1,7 +1,9 @@
 package dev.construction.weddingplanner;
 
+import java.lang.foreign.Linker.Option;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -35,12 +37,26 @@ public class Wedding {
     @DocumentReference //This makes the database store only the ids of the comments and the comments themselves will be stored in a separate collection
     private List<Comment> commentIds;
 
-    public Wedding(String weddingTitle, String dateTime, String location, String maxAttendees) {
+    UserService userService = new UserService();
+    public Wedding(String weddingTitle, String dateTime, String location, String maxAttendees, String email) {
         this.weddingId = new String (generateRandomId());
         this.weddingTitle = weddingTitle;
         this.dateTime = dateTime;
         this.location = location;
-        this.createdBy = createdBy;
+        this.createdBy = getSessionUser(email);
+        this.attendees = new ArrayList<User>();
+        this.maxAttendees = maxAttendees;
+        this.waitlist = new ArrayList<String>();
+        this.registry = new ArrayList<Item>();
+        this.invited = new ArrayList<String>();
+        this.commentIds = new ArrayList<Comment>();
+    }
+    public Wedding(String weddingTitle, String dateTime, String location, String maxAttendees, User user) {
+        this.weddingId = new String (generateRandomId());
+        this.weddingTitle = weddingTitle;
+        this.dateTime = dateTime;
+        this.location = location;
+        this.createdBy = user;
         this.attendees = new ArrayList<User>();
         this.maxAttendees = maxAttendees;
         this.waitlist = new ArrayList<String>();
@@ -55,6 +71,10 @@ public class Wedding {
         this.location = location;
         this.createdBy = user;
         this.maxAttendees = maxAttendees;
+    }
+    public User getSessionUser(String email) {
+        Optional<User> user = userService.findUserByEmail(email);
+        return user.get();
     }
     private String generateRandomId() {
         char letter = (char) ('A' + Math.random() * 26);

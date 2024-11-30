@@ -104,6 +104,8 @@
         <form action="/createwedding" method="POST" class="event-form">
             <h2>Create Event</h2>
             <div class="form-group">
+                <p><span>Logged in as:</span> <span th:text="${session.loggedInUser}"></span></p>
+
                 <label for="weddingTitle">Wedding Title:</label>
                 <input type="text" id="weddingTitle" name="weddingTitle" placeholder="e.g., Dream Wedding" required>
             </div>
@@ -119,6 +121,7 @@
                 <label for="maxAttendees">Max Attendees:</label>
                 <input type="number" id="maxAttendees" name="maxAttendees" placeholder="e.g., 100" required>
             </div>
+            <input type="hidden" name="email" th:value="${session.loggedInUser}">
             <button type="submit" class="submit-button">Create Event</button>
         </form>
     </main>

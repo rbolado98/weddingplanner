@@ -1,6 +1,7 @@
 package dev.construction.weddingplanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.json.*;
 
 @Controller
@@ -107,8 +110,9 @@ public class WelcomeController {
     @Autowired
     private WeddingService weddingService;
     @PostMapping("/createwedding")
-    public String createWedding(@RequestParam String weddingTitle, @RequestParam String location, @RequestParam String dateTime, @RequestParam String maxAttendees) {
-        weddingService.createWedding(weddingTitle, dateTime, location, maxAttendees);
+    public String createWedding(@RequestParam String weddingTitle, @RequestParam String location, @RequestParam String dateTime, @RequestParam String maxAttendees, @RequestParam String email, Model model, HttpSession session) {   
+        User user = userService.findUserByEmail(session.getAttribute("loggedInUser").toString()).get();
+        weddingService.createWedding(weddingTitle, dateTime, location, maxAttendees, user);
         return "redirect:/myevents";
         // return new ResponseEntity<Wedding>(weddingService.createWedding("weddingId", "weddingTitle", "dateTime", "location", "maxAtt"), HttpStatus.CREATED);
     }
@@ -134,7 +138,7 @@ public class WelcomeController {
 
     // Route for My Events Page (myevents.html)
     @GetMapping("/myevents")
-    public String showMyEventsPage(Model model) {
+    public String showMyEventsPage(Model model, HttpSession session) {
         // Add attributes to the model for dynamic rendering
         /*
          * public Wedding(String weddingId, String weddingTitle, String dateTime, String location, User createdBy, int maxAttendees) {
@@ -201,7 +205,11 @@ public class WelcomeController {
     }
 
     @GetMapping("/EventPlanner")
-    public String showEventPlannerPage() {
+    public String showEventPlannerPage(Model model, HttpSession session) {
+        Optional<User> user = userService.findUserByEmail(session.getAttribute("loggedInUser").toString());
+        System.out.println(session.getAttribute("loggedInUser").toString());
+        System.out.println(user);
+        model.addAttribute("loggedUser", user.get()); 
         return "EventPlanner"; // Matches EventPlanner.html in the templates folder
     }
 

@@ -72,6 +72,15 @@ public class Wedding {
         this.createdBy = user;
         this.maxAttendees = maxAttendees;
     }
+    public Wedding(String weddingId, String weddingTitle, String dateTime, String location, User user, List<String> invited, String maxAttendees) {
+        this.weddingId = weddingId;
+        this.weddingTitle = weddingTitle;
+        this.dateTime = dateTime;
+        this.location = location;
+        this.createdBy = user;
+        this.invited = invited;
+        this.maxAttendees = maxAttendees;
+    }
     public User getSessionUser(String email) {
         Optional<User> user = userService.findUserByEmail(email);
         return user.get();
@@ -83,5 +92,8 @@ public class Wedding {
     }
     public List<Item> getRegistry() {
         return registry;
+    }
+    public List<String> getInvited() {
+        return invited;
     }
 }

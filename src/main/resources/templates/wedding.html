@@ -114,10 +114,31 @@
                 <p><span>Wedding ID:</span><span th:text="${wedding.weddingId}"></span></p>
                 <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
             </div>
+            <h3>Attendees</h3>
+            <div class="event-item" th:each="attendee : ${wedding.attendees}">
+                <p><span>Name: </span> <span th:text="${attendee.name}"></span></p>
+            </div>
+            <h3>Invited</h3>
+            <div class="event-item" th:each="invitee : ${wedding.invited}">
+                <p><span>Name: </span> <span th:text="${invitee}"></span></p>
+            </div>
+            <h4>Invite Someone:</h4>
+            <form id="registryForm" action="/api/v1/items" method="POST">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. Toaster" required>
+                </div>
+                <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
+                <button type="submit" class="signup-button">Invite</button>
+            </form>
+            <h3>Waitlist</h3>
+            <div class="event-item" th:each="attendee : ${wedding.attendees}">
+                <p><span>Name</span> <span th:text="${attendee.name}"></span></p>
+            </div>
             <h3>Registry Items</h3>
-            <div class="event-item" th:each="wedding : ${registry}">
-                <p><span>Item</span> <span th:text="${wedding.name}"></span></p>
-                <p><span>Link:</span> <span th:text="${wedding.link}"></span></p>
+            <div class="event-item" th:each="item : ${registry}">
+                <p><span>Item</span> <span th:text="${item.name}"></span></p>
+                <p><span>Link:</span> <span th:text="${item.link}"></span></p>
             </div>
             <h4>Add Registry Item</h4>
             <form id="registryForm" action="/api/v1/items" method="POST">
@@ -132,8 +153,6 @@
                 <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
                 <button type="submit" class="signup-button">Create</button>
             </form>
-            
-            
         </div>
 
         <a href="/" class="button">Back to Home</a>

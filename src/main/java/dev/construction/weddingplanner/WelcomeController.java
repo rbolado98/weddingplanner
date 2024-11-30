@@ -1,7 +1,6 @@
 package dev.construction.weddingplanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -324,9 +323,6 @@ public class WelcomeController {
             System.out.println("Error: " + e);
         }
 
-
-        System.out.println(wedding.getAttendees());
-        System.out.println(registry);
         // Add wedding and registry to the model
         model.addAttribute("attendees", attendees);
         model.addAttribute("wedding", wedding);

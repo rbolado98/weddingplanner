@@ -114,19 +114,21 @@
                 <p><span>Wedding ID:</span><span th:text="${wedding.weddingId}"></span></p>
                 <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
             </div>
-            <h3>Attendees</h3>
-            <div class="event-item" th:each="attendee : ${wedding.attendees}">
+            <h3>RSVP'd</h3>
+            <div class="event-item" th:each="attendee : ${attendees}">
                 <p><span>Name: </span> <span th:text="${attendee.name}"></span></p>
+                <p><span>Email: </span> <span th:text="${attendee.email}"></span></p>
+
             </div>
             <h3>Invited</h3>
             <div class="event-item" th:each="invitee : ${wedding.invited}">
                 <p><span>Name: </span> <span th:text="${invitee}"></span></p>
             </div>
             <h4>Invite Someone:</h4>
-            <form id="registryForm" action="/api/v1/items" method="POST">
+            <form id="registryForm" action="/api/v1/weddings/addInvited" method="POST">
                 <div class="form-group">
                     <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" placeholder="e.g. Toaster" required>
+                    <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
                 </div>
                 <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
                 <button type="submit" class="signup-button">Invite</button>
@@ -177,7 +179,7 @@
     
                 if (response.ok) {
                     // Reload the page if the response is successful
-                    alert('Registry item created successfully!');
+                    alert('Successfully Added!');
                     location.reload(); // Reload the current page
                 } else {
                     const error = await response.json();

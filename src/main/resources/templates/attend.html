@@ -144,8 +144,7 @@
                 <div class="form-group">
                     <label for="weddingId">Enter Wedding ID:</label>
                     <input type="text" id="weddingId" name="weddingId" placeholder="e.g., 12345" required>
-                    <label for="email">Confirm your email:</label>
-                    <input type="text" id="email" name="email" placeholder="e.g., youremail@example.com">
+                    <input type="hidden" id="email" name="email" th:value="${session.loggedInUser}">
                 </div>
                 <button type="submit">RSVP: Yes</button>
                 <button href="/myevents" class="button">RSVP: No</button>

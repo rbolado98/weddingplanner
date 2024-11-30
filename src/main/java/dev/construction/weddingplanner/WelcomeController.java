@@ -200,7 +200,8 @@ public class WelcomeController {
 
     // Route for the Lookup Page (lookup.html)
     @GetMapping("/attend")
-    public String showAttendPage() {
+    public String showAttendPage(HttpSession session) {
+        System.out.println(session.getAttribute("loggedInUser").toString());
         return "attend"; // Matches attend.html in the templates folder
     }
 
@@ -266,6 +267,10 @@ public class WelcomeController {
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
+
+
+
+        // Fetch registry items for the wedding
         List<Item> registry = new ArrayList<Item>();
         try{
             // Fetch registry items for the wedding
@@ -274,7 +279,6 @@ public class WelcomeController {
                     .uri(URI.create("http://localhost:8080/api/v1/items/" + weddingId))
                     .build();
                 HttpResponse<String> registryResponse = client.send(registryRequest, HttpResponse.BodyHandlers.ofString());
-                System.out.println(registryResponse.body());
                 registryArray = new JSONArray(registryResponse.body());
                 for (int i = 0; i < registryArray.length(); i++) {
                     JSONObject item = registryArray.getJSONObject(i);
@@ -287,9 +291,34 @@ public class WelcomeController {
         catch (Exception e) {
             System.out.println("Error: " + e);
         }
+
+        // Fetch Attendees for the wedding
+        List<User> attendees = new ArrayList<User>();
+        try{
+            JSONArray attendeesArray = null;
+            HttpRequest attendeesRequest = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/api/v1/weddings/getAttendees/" + weddingId))
+                    .build();
+                HttpResponse<String> attendeesResponse = client.send(attendeesRequest, HttpResponse.BodyHandlers.ofString());
+                System.out.println(attendeesResponse.body());
+                attendeesArray = new JSONArray(attendeesResponse.body());
+                for (int i = 0; i < attendeesArray.length(); i++) {
+                    JSONObject attendee = attendeesArray.getJSONObject(i);
+                    attendees.add(new User(
+                            attendee.getString("name"),
+                            attendee.getString("email")
+                    ));
+                }
+        } 
+        catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+
+
         System.out.println(wedding.getAttendees());
         System.out.println(registry);
         // Add wedding and registry to the model
+        model.addAttribute("attendees", attendees);
         model.addAttribute("wedding", wedding);
         model.addAttribute("registry", registry);
         return "wedding"; // Matches wedding.html in the templates folder

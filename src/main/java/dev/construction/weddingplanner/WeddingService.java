@@ -35,6 +35,14 @@ public class WeddingService {
         return wedding;
     }
 
+    public Wedding addInvited(String name, String weddingId) {
+        mongoTemplate.update(Wedding.class)
+            .matching(Criteria.where("weddingId").is(weddingId))
+            .apply(new Update().push("invited").value(name))
+            .first();
+        return weddingRepository.findWeddingByWeddingId(weddingId).get();
+    }
+
     @Autowired
     private UserRepository userRepository;
     public User attendWedding(String weddingId, String userEmail) {

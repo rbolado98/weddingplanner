@@ -33,6 +33,15 @@ public class WeddingController {
     public ResponseEntity<Optional<Wedding>> getSingleWedding(@PathVariable String WeddingId) {  
         return new ResponseEntity<Optional<Wedding>>(weddingService.singleWedding(WeddingId), HttpStatus.OK);
     }
+    @PostMapping("/addInvited")
+    public ResponseEntity<Wedding> addInvited(@RequestParam String name, @RequestParam String weddingId) {  
+        return new ResponseEntity<Wedding>(weddingService.addInvited(name, weddingId), HttpStatus.CREATED);
+    }
+    @GetMapping("/getAttendees/{weddingId}")
+    public ResponseEntity<List<User>> getAttendees(@PathVariable String weddingId) {
+        return new ResponseEntity<List<User>>(weddingService.singleWedding(weddingId).get().getAttendees(), HttpStatus.OK);
+    }
+
     @PostMapping("/createwedding")
     public ResponseEntity<Wedding> createWedding(@RequestParam String weddingTitle, @RequestParam String location, @RequestParam String dateTime, @RequestParam String maxAttendees, @RequestParam String email) {  
         return new ResponseEntity<Wedding>(weddingService.createWedding(weddingTitle, dateTime, location, maxAttendees, email), HttpStatus.CREATED);

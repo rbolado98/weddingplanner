@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f6f2;
+            color: #4b4b4b;
+        }
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #eae4d3;
+            color: #4b4b4b;
+            border-bottom: 2px solid #d2c7b5;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: normal;
+        }
+        header p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #6c6c6c;
+        }
+        main {
+            padding: 50px 20px;
+        }
+        .profile-details, .event-list {
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-details h2, .event-list h2 {
+            margin-top: 0;
+            color: #4b4b4b;
+        }
+        .profile-details p, .event-item p {
+            font-size: 1rem;
+            margin: 10px 0;
+            color: #4b4b4b;
+        }
+        .profile-details span, .event-item span {
+            font-weight: bold;
+        }
+        .event-item {
+            border-bottom: 1px solid #d2c7b5;
+            padding: 10px 0;
+        }
+        .event-item:last-child {
+            border-bottom: none;
+        }
+        .rsvp-status {
+            font-weight: bold;
+            color: #4CAF50; /* Green for accepted by default */
+        }
+        .rsvp-status.declined {
+            color: #E53935; /* Red for declined */
+        }
+        .rsvp-status.pending {
+            color: #FFC107; /* Yellow for pending */
+        }
+        .button {
+            display: inline-block;
+            margin: 20px 10px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            color: white;
+            background-color: #a19078;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-family: 'Arial', sans-serif;
+        }
+        .button:hover {
+            background-color: #8c7a62;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #eae4d3;
+            color: #6c6c6c;
+            border-top: 2px solid #d2c7b5;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Profile</h1>
+        <p>View and manage your account details.</p>
+    </header>
+    <main>
+        
+        <div class="event-list">
+            <h2>Wedding Details</h2>
+            <div class="event-item">
+                <p><span>Wedding Title:</span> <span th:text="${wedding.weddingTitle}"></span></p>
+                <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
+                <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
+                <p><span>RSVP Code: </span><span th:text="${wedding.weddingId}"></span></p>
+                <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
+            </div>
+            <h3>RSVP'd</h3>
+            <div class="event-item" th:each="attendee : ${attendees}">
+                <p><span>Name: </span> <span th:text="${attendee.name}"></span></p>
+                <p><span>Email: </span> <span th:text="${attendee.email}"></span></p>
+
+            </div>
+            <h3>Invited</h3>
+            <div class="event-item" th:each="invitee : ${wedding.invited}">
+                <p><span th:text="${invitee}"></span></p>
+            </div>
+            <h4>Invite Someone:</h4>
+            <form id="inviteForm" action="/api/v1/weddings/addInvited" method="POST">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
+                </div>
+                <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
+                <button type="submit" class="signup-button">Invite</button>
+            </form>
+            <h3>Waitlist</h3>
+            <div class="event-item" th:each="waitlistee : ${wedding.waitlist}">
+                <p><span th:text="${waitlistee}"></span></p>
+            </div>
+            <h4>Add Someone to Waitlist:</h4>
+            <form id="waitlistForm" action="/api/v1/weddings/addToWaitlist" method="POST">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
+                </div>
+                <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
+                <button type="submit" class="signup-button">Invite</button>
+            </form>
+            <h3>Registry Items</h3>
+            <div class="event-item" th:each="item : ${registry}">
+                <p><span>Item:</span> <span th:text="${item.name}"></span></p>
+                <p><span>Link:</span> <span th:text="${item.link}"></span></p>
+            </div>
+            <h4>Add Registry Item</h4>
+            <form id="itemForm" action="/api/v1/items" method="POST">
+                <div class="form-group">
+                    <label for="name">Gift:</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. Toaster" required>
+                </div>
+                <div class="form-group">
+                    <label for="link">Link:</label>
+                    <input type="text" id="link" name="link" placeholder="toaster.com" required>
+                </div>
+                <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
+                <button type="submit" class="signup-button">Create</button>
+            </form>
+        </div>
+
+        <a href="/myevents" class="button">Back to My Events</a>
+        <a href="/" class="button">Back to Home</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 Wedding Planner App. Designed with elegance and care.</p>
+    </footer>
+
+    <script>
+        document.getElementById('inviteForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the default form submission
+    
+            // Gather form data
+            const formData = new FormData(this);
+    
+            try {
+                // Send POST request to the server
+                const response = await fetch(this.action, {
+                    method: this.method,
+                    body: formData
+                });
+    
+                if (response.ok) {
+                    // Reload the page if the response is successful
+                    alert('Successfully Added!');
+                    location.reload(); // Reload the current page
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.message}`);
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('An error occurred while submitting the form.');
+            }
+        });
+        document.getElementById('waitlistForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the default form submission
+    
+            // Gather form data
+            const formData = new FormData(this);
+    
+            try {
+                // Send POST request to the server
+                const response = await fetch(this.action, {
+                    method: this.method,
+                    body: formData
+                });
+    
+                if (response.ok) {
+                    // Reload the page if the response is successful
+                    alert('Successfully Added!');
+                    location.reload(); // Reload the current page
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.message}`);
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('An error occurred while submitting the form.');
+            }
+        });
+        document.getElementById('itemForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the default form submission
+    
+            // Gather form data
+            const formData = new FormData(this);
+    
+            try {
+                // Send POST request to the server
+                const response = await fetch(this.action, {
+                    method: this.method,
+                    body: formData
+                });
+    
+                if (response.ok) {
+                    // Reload the page if the response is successful
+                    alert('Successfully Added!');
+                    location.reload(); // Reload the current page
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.message}`);
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    </script>
+</body>
+</html>

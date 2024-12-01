@@ -139,17 +139,19 @@
     <main>
         <!-- Wedding Lookup Form -->
         <div class="form-section">
-            <h2>Attend Wedding</h2>
-            <form action="/attend" method="GET">
+            <h2>RSVP to a Wedding</h2>
+            <form action="/attendwedding" method="POST">
                 <div class="form-group">
-                    <label for="weddingId">Enter Wedding ID to attend:</label>
+                    <label for="weddingId">Enter Wedding ID:</label>
                     <input type="text" id="weddingId" name="weddingId" placeholder="e.g., 12345" required>
+                    <input type="hidden" id="email" name="email" th:value="${session.loggedInUser}">
                 </div>
-                <button type="submit">Search</button>
+                <button type="submit" class="button">RSVP: Yes</button>
+                <button href="/myevents" class="button">RSVP: No</button>
             </form>
         </div>
         <a> </a>
-        <a href="/" class="button">Home Menu</a>
+        <a href="/" class="button">Go Home</a>
         <a href="/myevents" class="button">Go to my Events</a>
     </main>
     <footer>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -107,6 +107,22 @@
             margin: 0;
             font-size: 0.9rem;
         }
+        .button {
+            display: inline-block;
+            margin: 20px 10px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            color: white;
+            background-color: #a19078;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-family: 'Arial', sans-serif;
+        }
+        button:hover {
+            background-color: #8c7a62;
+        }
     </style>
 </head>
 <body>
@@ -115,36 +131,32 @@
         <p>Enter the details of your wedding event below.</p>
     </header>
     <main>
-        <form class="event-form">
+        <form action="/createwedding" method="POST" class="event-form">
             <h2>Create Event</h2>
             <div class="form-group">
-                <label for="eventTitle">Event Title:</label>
-                <input type="text" id="eventTitle" name="eventTitle" placeholder="e.g., Dream Wedding" required>
+                <p><span>Logged in as:</span> <span th:text="${session.loggedInUser}"></span></p>
+                <label for="weddingTitle">Wedding Title:</label>
+                <input type="text" id="weddingTitle" name="weddingTitle" placeholder="e.g., Dream Wedding" required>
             </div>
             <div class="form-group">
-                <label for="eventId">Event ID:</label>
-                <input type="text" id="eventId" name="eventId" placeholder="e.g., 12345" required>
+                <label for="locaction">Location:</label>
+                <input type="text" id="location" name="location" placeholder="e.g., Central Park, NYC" required>
             </div>
             <div class="form-group">
-                <label for="eventDateTime">Date and Time:</label>
-                <input type="datetime-local" id="eventDateTime" name="eventDateTime" required>
-            </div>
-            <div class="form-group">
-                <label for="eventLocation">Location:</label>
-                <input type="text" id="eventLocation" name="eventLocation" placeholder="e.g., Central Park, NYC" required>
-            </div>
-            <div class="form-group">
-                <label for="createdBy">Created By:</label>
-                <input type="text" id="createdBy" name="createdBy" placeholder="e.g., John Doe" required>
+                <label for="dateTime">Date and Time:</label>
+                <input type="datetime-local" id="dateTime" name="dateTime" required>
             </div>
             <div class="form-group">
                 <label for="maxAttendees">Max Attendees:</label>
                 <input type="number" id="maxAttendees" name="maxAttendees" placeholder="e.g., 100" required>
             </div>
+            <input type="hidden" name="email" th:value="${session.loggedInUser}">
             <button type="submit" class="submit-button">Create Event</button>
             <a href="/" class="button">Home Menu</a>
         </form>
+        <a href="/" class="button">Go Back</a>
     </main>
+    
     <footer>
         <p>&copy; 2024 Wedding Planner App. Designed with elegance and care.</p>
     </footer>

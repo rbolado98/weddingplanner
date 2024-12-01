@@ -1,21 +1,22 @@
 package dev.construction.weddingplanner;
 
 import java.util.List;
-// import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-// import org.springframework.web.bind.annotation.PostMapping;
-// import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/weddings")
+@CrossOrigin(origins = "*")
 public class WeddingController {
     @Autowired
     private WeddingService weddingService;
@@ -32,4 +33,22 @@ public class WeddingController {
     public ResponseEntity<Optional<Wedding>> getSingleWedding(@PathVariable String WeddingId) {  
         return new ResponseEntity<Optional<Wedding>>(weddingService.singleWedding(WeddingId), HttpStatus.OK);
     }
+    @PostMapping("/addInvited")
+    public ResponseEntity<Wedding> addInvited(@RequestParam String name, @RequestParam String weddingId) {  
+        return new ResponseEntity<Wedding>(weddingService.addInvited(name, weddingId), HttpStatus.CREATED);
+    }
+    @PostMapping("/addToWaitlist")
+    public ResponseEntity<Wedding> addToWaitlist(@RequestParam String name, @RequestParam String weddingId) {  
+        return new ResponseEntity<Wedding>(weddingService.addToWaitlist(name, weddingId), HttpStatus.CREATED);
+    }
+    @GetMapping("/getAttendees/{weddingId}")
+    public ResponseEntity<List<User>> getAttendees(@PathVariable String weddingId) {
+        return new ResponseEntity<List<User>>(weddingService.singleWedding(weddingId).get().getAttendees(), HttpStatus.OK);
+    }
+
+    @PostMapping("/createwedding")
+    public ResponseEntity<Wedding> createWedding(@RequestParam String weddingTitle, @RequestParam String location, @RequestParam String dateTime, @RequestParam String maxAttendees, @RequestParam String email) {  
+        return new ResponseEntity<Wedding>(weddingService.createWedding(weddingTitle, dateTime, location, maxAttendees, email), HttpStatus.CREATED);
+    }
+
 }

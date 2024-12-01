@@ -23,9 +23,6 @@ public class ItemController {
     private ItemService itemService;
     @PostMapping
     public ResponseEntity<Item> createItemInWed(@RequestParam String name, @RequestParam String link, @RequestParam String weddingId) {
-        System.out.println("Name: " + name);
-        System.out.println("Link: " + link);
-        System.out.println("WeddingId: " + weddingId);
         return new ResponseEntity<Item>(itemService.createItem(name, link, weddingId), HttpStatus.CREATED);
     }
     @PostMapping("/createitem")

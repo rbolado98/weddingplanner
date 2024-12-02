@@ -30,54 +30,26 @@ public class WelcomeController {
 
     // Route for the Profile Page
     @GetMapping("/profile")
-    public String showProfilePage(Model model) {
-        // Add attributes to the model for dynamic rendering
-        /*
-         * public Wedding(String weddingId, String weddingTitle, String dateTime, String location, User createdBy, int maxAttendees) {
-        this.weddingId = weddingId;
-        this.weddingTitle = weddingTitle;
-        this.dateTime = dateTime;
-        this.location = location;
-        this.createdBy = createdBy;
-        this.maxAttendees = maxAttendees;
-    }
-         */
-        JSONArray weddingarray = null;
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/v1/weddings"))
+    public String showProfilePage(Model model, HttpSession session) {
+        HttpClient client0 = HttpClient.newHttpClient();
+        HttpRequest request0 = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/v1/users/" + session.getAttribute("loggedInUser").toString()))
                 .build();
-        List<Wedding> weddings = new ArrayList<Wedding>();
-        try{
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            // System.out.println(response.body());
-            weddingarray = new JSONArray(response.body());
-            for (int i = 0; i < weddingarray.length(); i++) {
-                JSONObject wedding = weddingarray.getJSONObject(i);
-                User user = null;
-                if(wedding.get("createdBy").equals("null")){
-                    System.out.println(wedding.get("createdBy"));
-                    JSONObject userobject = wedding.getJSONObject("createdBy");
-                    user = new User(
-                        userobject.getString("name"),
-                        userobject.getString("email"),
-                        userobject.getString("password"),
-                        userobject.getBoolean("admin")
-                    );
-                }
-                weddings.add(
-                    new Wedding(wedding.getString("weddingId"), 
-                    wedding.getString("weddingTitle"), 
-                    wedding.getString("dateTime"), 
-                    wedding.getString("location"), 
-                    user,
-                    wedding.getString("maxAttendees")));
-            }
-        }
-        catch (Exception e){
+        User userm = null;
+        try {
+            // Fetch user details
+            HttpResponse<String> response0 = client0.send(request0, HttpResponse.BodyHandlers.ofString());
+            JSONObject userObject = new JSONObject(response0.body());
+            userm = new User(
+                userObject.getString("name"),
+                userObject.getString("email")
+            );
+        } catch (Exception e) {
             System.out.println("Error: " + e);
         }
-        model.addAttribute("weddings", weddings);
+        
+        model.addAttribute("user", userm);
+        System.out.println("USER: "+ model.getAttribute("user"));
         return "profile"; // Matches profile.html in the templates folder
     }
 

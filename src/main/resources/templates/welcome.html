@@ -18,6 +18,24 @@
             background-color: #eae4d3;
             color: #4b4b4b;
             border-bottom: 2px solid #d2c7b5;
+            position: relative; /* Added this to position elements relative to the header */
+        }
+
+        .profile-button {
+            position: absolute; /* Positions the button at the top right corner */
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #a19078;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-button:hover {
+            background-color: #8c7a62;
         }
         header h1 {
             margin: 0;
@@ -77,6 +95,8 @@
     <header>
         <h1>Welcome to Wedding Planner</h1>
         <p>Your journey to an unforgettable wedding begins here.</p>
+        <!-- Profile Button -->
+        <a href="/profile" class="profile-button">Profile</a>
     </header>
     <main>
         <p>We help you plan, organize, and create beautiful memories for your special day.</p>

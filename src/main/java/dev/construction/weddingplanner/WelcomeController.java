@@ -223,7 +223,58 @@ public class WelcomeController {
             System.out.println("Error: " + e);
         }
         model.addAttribute("weddings", weddings);
-        return "myevents"; // Matches profile.html in the templates folder
+        return "attending"; // Matches profile.html in the templates folder
+    }
+
+    @GetMapping("/allweddings")
+    public String showAllWeddings(Model model, HttpSession session) {
+        
+        JSONArray weddingarray = null;
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/v1/weddings"))
+                .build();
+        List<Wedding> weddings = new ArrayList<Wedding>();
+        try{
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("RESPONSE: " + response.body());
+            weddingarray = new JSONArray(response.body());
+            for (int i = 0; i < weddingarray.length(); i++) {
+                JSONObject wedding = weddingarray.getJSONObject(i);
+                /*
+                 *  "createdBy": {
+                    "id": null,
+                    "name": "John Doe",
+                    "email": "john.doe@example.com",
+                    "password": "Password123",
+                    "admin": true
+                },
+                 */
+                User user = null;
+                if(wedding.get("createdBy").equals("null")){
+                    System.out.println(wedding.get("createdBy"));
+                    JSONObject userobject = wedding.getJSONObject("createdBy");
+                    user = new User(
+                        userobject.getString("name"),
+                        userobject.getString("email"),
+                        userobject.getString("password"),
+                        userobject.getBoolean("admin")
+                    );
+                }
+                weddings.add(
+                    new Wedding(wedding.getString("weddingId"), 
+                    wedding.getString("weddingTitle"), 
+                    wedding.getString("dateTime"), 
+                    wedding.getString("location"), 
+                    user,
+                    wedding.getString("maxAttendees")));
+            }
+        }
+        catch (Exception e){
+            System.out.println("Error: " + e);
+        }
+        model.addAttribute("weddings", weddings);
+        return "allweddings"; // Matches profile.html in the templates folder
     }
 
     // Route for the Lookup Page (lookup.html)

@@ -29,6 +29,14 @@ public class WeddingController {
     public ResponseEntity<List<Wedding>> getWeddings() {
         return new ResponseEntity<List<Wedding>> (weddingService.allWeddings(), HttpStatus.OK);
     } 
+    @GetMapping("/created/{email}")
+    public ResponseEntity<List<Optional<Wedding>>> getWeddingsForUser(@PathVariable String email) {
+        return new ResponseEntity<List<Optional<Wedding>>>(weddingService.getWeddingsForUser(email), HttpStatus.OK);
+    }
+    @GetMapping("/attending/{email}")
+    public ResponseEntity<List<Optional<Wedding>>> getAttendingWeddings(@PathVariable String email) {
+        return new ResponseEntity<List<Optional<Wedding>>>(weddingService.getAttendingWeddings(email), HttpStatus.OK);
+    }
     @GetMapping("/{WeddingId}")
     public ResponseEntity<Optional<Wedding>> getSingleWedding(@PathVariable String WeddingId) {  
         return new ResponseEntity<Optional<Wedding>>(weddingService.singleWedding(WeddingId), HttpStatus.OK);

@@ -15,6 +15,8 @@ public class WeddingService {
     @Autowired
     private WeddingRepository weddingRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private MongoTemplate mongoTemplate;
     public List<Wedding> allWeddings() {
         return weddingRepository.findAll();
@@ -22,6 +24,18 @@ public class WeddingService {
 
     public Optional<Wedding> singleWedding(String WeddingId) {
         return weddingRepository.findWeddingByWeddingId(WeddingId);
+    }
+
+    // Find weddings created by user
+    public List<Optional<Wedding>> getWeddingsForUser(String email) {
+        User user = userRepository.findUserByEmail(email).get();
+        return weddingRepository.findWeddingByCreatedBy(user);
+    }
+
+    // Find weddings being attended by user
+    public List<Optional<Wedding>> getAttendingWeddings(String email) {
+        User user = userRepository.findUserByEmail(email).get();
+        return weddingRepository.findWeddingByAttendeesContaining(user);
     }
 
     public Wedding createWedding(String weddingTitle, String dateTime, String location, String maxAttendees, String email) {
@@ -50,8 +64,7 @@ public class WeddingService {
         return weddingRepository.findWeddingByWeddingId(weddingId).get();
     }
 
-    @Autowired
-    private UserRepository userRepository;
+    
     public User attendWedding(String weddingId, String userEmail) {
         User user = userRepository.findUserByEmail(userEmail).get();
         mongoTemplate.update(Wedding.class)

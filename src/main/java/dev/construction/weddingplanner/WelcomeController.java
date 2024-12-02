@@ -124,12 +124,69 @@ public class WelcomeController {
         JSONArray weddingarray = null;
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/v1/weddings"))
+                // .uri(URI.create("http://localhost:8080/api/v1/weddings"))
+                // call by user
+                .uri(URI.create("http://localhost:8080/api/v1/weddings/created/" + session.getAttribute("loggedInUser").toString()))
+
                 .build();
         List<Wedding> weddings = new ArrayList<Wedding>();
         try{
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            // System.out.println(response.body());
+            System.out.println("RESPONSE: " + response.body());
+            weddingarray = new JSONArray(response.body());
+            for (int i = 0; i < weddingarray.length(); i++) {
+                JSONObject wedding = weddingarray.getJSONObject(i);
+                /*
+                 *  "createdBy": {
+                    "id": null,
+                    "name": "John Doe",
+                    "email": "john.doe@example.com",
+                    "password": "Password123",
+                    "admin": true
+                },
+                 */
+                User user = null;
+                if(wedding.get("createdBy").equals("null")){
+                    System.out.println(wedding.get("createdBy"));
+                    JSONObject userobject = wedding.getJSONObject("createdBy");
+                    user = new User(
+                        userobject.getString("name"),
+                        userobject.getString("email"),
+                        userobject.getString("password"),
+                        userobject.getBoolean("admin")
+                    );
+                }
+                weddings.add(
+                    new Wedding(wedding.getString("weddingId"), 
+                    wedding.getString("weddingTitle"), 
+                    wedding.getString("dateTime"), 
+                    wedding.getString("location"), 
+                    user,
+                    wedding.getString("maxAttendees")));
+            }
+        }
+        catch (Exception e){
+            System.out.println("Error: " + e);
+        }
+        model.addAttribute("weddings", weddings);
+        return "myevents"; // Matches profile.html in the templates folder
+    }
+
+    @GetMapping("/attending")
+    public String showAttendingPage(Model model, HttpSession session) {
+        
+        JSONArray weddingarray = null;
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                // .uri(URI.create("http://localhost:8080/api/v1/weddings"))
+                // call by user
+                .uri(URI.create("http://localhost:8080/api/v1/weddings/attending/" + session.getAttribute("loggedInUser").toString()))
+
+                .build();
+        List<Wedding> weddings = new ArrayList<Wedding>();
+        try{
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("RESPONSE: " + response.body());
             weddingarray = new JSONArray(response.body());
             for (int i = 0; i < weddingarray.length(); i++) {
                 JSONObject wedding = weddingarray.getJSONObject(i);
@@ -182,7 +239,7 @@ public class WelcomeController {
         System.out.println(session.getAttribute("loggedInUser").toString());
         System.out.println(user);
         model.addAttribute("loggedUser", user.get()); 
-        return "EventPlanner"; // Matches EventPlanner.html in the templates folder
+        return "attending"; // Matches EventPlanner.html in the templates folder
     }
 
 

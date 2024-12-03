@@ -81,6 +81,7 @@
             text-decoration: none;
             transition: background-color 0.3s ease;
             font-family: 'Arial', sans-serif;
+            cursor: pointer;
         }
         .button:hover {
             background-color: #8c7a62;
@@ -111,7 +112,10 @@
                 <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
                 <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
                 <p><span>RSVP Code: </span><span th:text="${wedding.weddingId}"></span></p>
-                <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
+                <div th:if="${admin}">
+                    <p><span>RSVP Status:</span> <span class="rsvp-status" th:text="${attendeesCount}"></span></p>
+                    <p><span>Max Attendees:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
+                </div>
             </div>
             <h3>RSVP'd</h3>
             <div class="event-item" th:each="attendee : ${attendees}">

@@ -426,6 +426,9 @@ public class WelcomeController {
         }
         System.out.println("ADMIIIIN YES OR NO:"+model.getAttribute("admin").toString());
         // Add wedding and registry to the model
+        int attendeesCount = attendees.size();
+        System.out.println(attendeesCount);
+        model.addAttribute("attendeesCount", attendeesCount);
         model.addAttribute("attendees", attendees);
         model.addAttribute("wedding", wedding);
         model.addAttribute("registry", registry);

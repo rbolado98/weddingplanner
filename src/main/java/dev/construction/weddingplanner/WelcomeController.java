@@ -95,13 +95,14 @@ public class WelcomeController {
 
     // Route for the Signup Page (signup.html)
     @PostMapping("/createuser")
-    public String handleSignup(@RequestParam String name, @RequestParam String email, @RequestParam String password, Model model) {
+    public String handleSignup(@RequestParam String name, @RequestParam String email, @RequestParam String password, HttpSession session, Model model) {
         if (userService.checkIfUserExists(email)) {
             model.addAttribute("error", "User already exists");
         } else {
             userService.createUser(name, email, password);
+            session.setAttribute("loggedInUser", email);
             model.addAttribute("email", email);
-            return "redirect:/profile"; // Redirect to profile page on successful signup
+            return "redirect:/"; // Redirect to home page on successful signup
         }
         return "signup"; // Matches signup.html in the templates folder
     }
@@ -290,7 +291,7 @@ public class WelcomeController {
         System.out.println(session.getAttribute("loggedInUser").toString());
         System.out.println(user);
         model.addAttribute("loggedUser", user.get()); 
-        return "attending"; // Matches EventPlanner.html in the templates folder
+        return "EventPlanner"; // Matches EventPlanner.html in the templates folder
     }
 
 

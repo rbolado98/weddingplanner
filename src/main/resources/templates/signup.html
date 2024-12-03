@@ -125,6 +125,9 @@
                 <label for="confirm-password">Confirm Password:</label>
                 <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
             </div>
+            <div th:if="${error}" class="error-message">
+                <p th:text="${error}" style="color: red;"></p>
+            </div>
             <button type="submit" class="signup-button">Sign Up</button>
             <p class="login-text">Already have an account? <a href="/login">Login</a></p>
         </form>

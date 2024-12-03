@@ -93,6 +93,12 @@ public class WelcomeController {
         return "redirect:/myevents";
     }
 
+    @GetMapping("/logout")
+    public String handleLogout(HttpSession session) {
+        session.removeAttribute("loggedInUser");
+        return "redirect:/login"; // Redirect to home page on logout
+    }
+
     // Route for the Signup Page (signup.html)
     @PostMapping("/createuser")
     public String handleSignup(@RequestParam String name, @RequestParam String email, @RequestParam String password, HttpSession session, Model model) {

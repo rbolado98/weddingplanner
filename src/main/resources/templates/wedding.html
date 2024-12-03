@@ -100,15 +100,14 @@
 </head>
 <body>
     <header>
-        <h1>User Profile</h1>
-        <p>View and manage your account details.</p>
+        <h1>Wedding Planner App</h1>
+        <p>Make your dreams come true.</p>
     </header>
     <main>
         
         <div class="event-list">
-            <h2>Wedding Details</h2>
+            <h2><span th:text="${wedding.weddingTitle}"></span></h2>
             <div class="event-item">
-                <p><span>Wedding Title:</span> <span th:text="${wedding.weddingTitle}"></span></p>
                 <p><span>Date & Time:</span> <span th:text="${wedding.dateTime}"></span></p>
                 <p><span>Location:</span> <span th:text="${wedding.location}"></span></p>
                 <p><span>RSVP Code: </span><span th:text="${wedding.weddingId}"></span></p>
@@ -124,49 +123,55 @@
             <div class="event-item" th:each="invitee : ${wedding.invited}">
                 <p><span th:text="${invitee}"></span></p>
             </div>
-            <h4>Invite Someone:</h4>
-            <form id="inviteForm" action="/api/v1/weddings/addInvited" method="POST">
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
-                </div>
-                <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
-                <button type="submit" class="signup-button">Invite</button>
-            </form>
+            <div th:if="${admin}">
+                <h4>Invite Someone:</h4>
+                <form id="inviteForm" action="/api/v1/weddings/addInvited" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
+                    </div>
+                    <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
+                    <button type="submit" class="signup-button">Invite</button>
+                </form>
+            </div>
             <h3>Waitlist</h3>
             <div class="event-item" th:each="waitlistee : ${wedding.waitlist}">
                 <p><span th:text="${waitlistee}"></span></p>
             </div>
+            <div th:if="${admin}">
             <h4>Add Someone to Waitlist:</h4>
-            <form id="waitlistForm" action="/api/v1/weddings/addToWaitlist" method="POST">
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
-                </div>
-                <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
-                <button type="submit" class="signup-button">Invite</button>
-            </form>
+                <form id="waitlistForm" action="/api/v1/weddings/addToWaitlist" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
+                    </div>
+                    <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
+                    <button type="submit" class="signup-button">Invite</button>
+                </form>
+            </div>
             <h3>Registry Items</h3>
             <div class="event-item" th:each="item : ${registry}">
                 <p><span>Item:</span> <span th:text="${item.name}"></span></p>
                 <p><span>Link:</span> <span th:text="${item.link}"></span></p>
             </div>
+            <div th:if="${admin}">
             <h4>Add Registry Item</h4>
-            <form id="itemForm" action="/api/v1/items" method="POST">
-                <div class="form-group">
-                    <label for="name">Gift:</label>
-                    <input type="text" id="name" name="name" placeholder="e.g. Toaster" required>
-                </div>
-                <div class="form-group">
-                    <label for="link">Link:</label>
-                    <input type="text" id="link" name="link" placeholder="toaster.com" required>
-                </div>
-                <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
-                <button type="submit" class="signup-button">Create</button>
-            </form>
+                <form id="itemForm" action="/api/v1/items" method="POST">
+                    <div class="form-group">
+                        <label for="name">Gift:</label>
+                        <input type="text" id="name" name="name" placeholder="e.g. Toaster" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="link">Link:</label>
+                        <input type="text" id="link" name="link" placeholder="toaster.com" required>
+                    </div>
+                    <input type="hidden" name="weddingId" th:value="${wedding.weddingId}">
+                    <button type="submit" class="signup-button">Create</button>
+                </form>
+            </div>
         </div>
 
-        <a href="/myevents" class="button">Back to My Events</a>
+        <button class="button" onclick="history.back()">Back</button>
         <a href="/" class="button">Back to Home</a>
     </main>
     <footer>

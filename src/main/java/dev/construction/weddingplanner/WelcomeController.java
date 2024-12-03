@@ -21,10 +21,14 @@ import org.json.*;
 
 @Controller
 public class WelcomeController {
-
+    @Autowired
+    private UserService userService;
     // Route for the Welcome Page
     @GetMapping("/")
-    public String showWelcomePage() {
+    public String showWelcomePage(Model model, HttpSession session) {
+        if (userService.findUserByEmail(session.getAttribute("loggedInUser").toString()).get().isAdmin()) {
+            model.addAttribute("admin", true);
+        }
         return "welcome"; // Matches welcome.html in the templates folder
     }
 
@@ -42,14 +46,15 @@ public class WelcomeController {
             JSONObject userObject = new JSONObject(response0.body());
             userm = new User(
                 userObject.getString("name"),
-                userObject.getString("email")
+                userObject.getString("email"),
+                userObject.getString("password"),
+                userObject.getBoolean("admin")
             );
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
         
         model.addAttribute("user", userm);
-        System.out.println("USER: "+ model.getAttribute("user"));
         return "profile"; // Matches profile.html in the templates folder
     }
 
@@ -64,13 +69,16 @@ public class WelcomeController {
         return "signup"; // Matches signup.html in the templates folder
     }
     // Handle login form submission
-    @Autowired
-    private UserService userService;
+    
     @PostMapping("/validateUser")
     public String handleLogin(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
+        User user = userService.findUserByEmail(email).get();
         if (userService.authenticate(email, password)) {
             model.addAttribute("email", email);
             session.setAttribute("loggedInUser", email);
+            if (user.isAdmin()) {
+                model.addAttribute("admin", true);
+            }
             return "redirect:/"; // Redirect to profile page on successful login
         } else {
             model.addAttribute("error", "Invalid email or password");
@@ -90,20 +98,22 @@ public class WelcomeController {
     @PostMapping("/attendwedding")
     public String attendWedding(@RequestParam String weddingId, @RequestParam String email) {
         weddingService.attendWedding(weddingId, email);
-        return "redirect:/myevents";
+        return "redirect:/attending";
     }
 
     @GetMapping("/logout")
-    public String handleLogout(HttpSession session) {
+    public String handleLogout(Model model, HttpSession session) {
         session.removeAttribute("loggedInUser");
         return "redirect:/login"; // Redirect to home page on logout
     }
 
     // Route for the Signup Page (signup.html)
     @PostMapping("/createuser")
-    public String handleSignup(@RequestParam String name, @RequestParam String email, @RequestParam String password, HttpSession session, Model model) {
+    public String handleSignup(@RequestParam String name, @RequestParam String email, @RequestParam String password, @RequestParam String confirmpassword, HttpSession session, Model model) {
         if (userService.checkIfUserExists(email)) {
             model.addAttribute("error", "User already exists");
+        } if (!password.equals(confirmpassword)) {
+            model.addAttribute("error", "Passwords do not match");
         } else {
             userService.createUser(name, email, password);
             session.setAttribute("loggedInUser", email);
@@ -139,7 +149,6 @@ public class WelcomeController {
         List<Wedding> weddings = new ArrayList<Wedding>();
         try{
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("RESPONSE: " + response.body());
             weddingarray = new JSONArray(response.body());
             for (int i = 0; i < weddingarray.length(); i++) {
                 JSONObject wedding = weddingarray.getJSONObject(i);
@@ -193,7 +202,6 @@ public class WelcomeController {
         List<Wedding> weddings = new ArrayList<Wedding>();
         try{
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("RESPONSE: " + response.body());
             weddingarray = new JSONArray(response.body());
             for (int i = 0; i < weddingarray.length(); i++) {
                 JSONObject wedding = weddingarray.getJSONObject(i);
@@ -244,7 +252,6 @@ public class WelcomeController {
         List<Wedding> weddings = new ArrayList<Wedding>();
         try{
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("RESPONSE: " + response.body());
             weddingarray = new JSONArray(response.body());
             for (int i = 0; i < weddingarray.length(); i++) {
                 JSONObject wedding = weddingarray.getJSONObject(i);
@@ -303,7 +310,9 @@ public class WelcomeController {
 
     @SuppressWarnings("null")
     @GetMapping("/wedding")
-    public String showWeddingPage(Model model, @RequestParam String weddingId) {
+    public String showWeddingPage(Model model, HttpSession session, @RequestParam String weddingId) {
+        User loggedInUser = userService.findUserByEmail(session.getAttribute("loggedInUser").toString()).get();
+        
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/api/v1/weddings/" + weddingId))
@@ -315,14 +324,20 @@ public class WelcomeController {
             JSONObject weddingObject = new JSONObject(response.body());
 
             User user = null;
+            model.addAttribute("admin", false);
+            if(loggedInUser.isAdmin()){
+                model.addAttribute("admin", true);
+            }
             if (!weddingObject.get("createdBy").equals("null")) {
                 JSONObject userObject = weddingObject.getJSONObject("createdBy");
+                System.out.println("UserObject: " + userObject);
                 user = new User(
                         userObject.getString("name"),
                         userObject.getString("email"),
                         userObject.getString("password"),
                         userObject.getBoolean("admin")
                 );
+                
             }
             List<String> invitedList = new ArrayList<>();
             if (weddingObject.has("invited") && !weddingObject.isNull("invited")) {
@@ -343,11 +358,9 @@ public class WelcomeController {
             List<String> waitlist = new ArrayList<>();
             if (weddingObject.has("waitlist") && !weddingObject.isNull("waitlist")) {
                 JSONArray waitlistArray = weddingObject.getJSONArray("waitlist");
-                System.out.println("WaitlistArray: " + waitlistArray);
                 for (int i = 0; i < waitlistArray.length(); i++) {
                     waitlist.add(waitlistArray.getString(i)); // Extract each string
                 }
-                System.out.println("Waitlist: "+ waitlist);
                 wedding.setWaitlist(waitlist);
             } else{
             wedding = new Wedding(
@@ -361,10 +374,12 @@ public class WelcomeController {
             }
 
             
+            if(wedding.getCreatedBy().getEmail().equalsIgnoreCase(loggedInUser.getEmail())){
+                model.addAttribute("admin", true);
+            }
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
-
 
 
         // Fetch registry items for the wedding
@@ -397,7 +412,6 @@ public class WelcomeController {
                     .uri(URI.create("http://localhost:8080/api/v1/weddings/getAttendees/" + weddingId))
                     .build();
                 HttpResponse<String> attendeesResponse = client.send(attendeesRequest, HttpResponse.BodyHandlers.ofString());
-                System.out.println(attendeesResponse.body());
                 attendeesArray = new JSONArray(attendeesResponse.body());
                 for (int i = 0; i < attendeesArray.length(); i++) {
                     JSONObject attendee = attendeesArray.getJSONObject(i);
@@ -410,7 +424,7 @@ public class WelcomeController {
         catch (Exception e) {
             System.out.println("Error: " + e);
         }
-
+        System.out.println("ADMIIIIN YES OR NO:"+model.getAttribute("admin").toString());
         // Add wedding and registry to the model
         model.addAttribute("attendees", attendees);
         model.addAttribute("wedding", wedding);

@@ -55,11 +55,15 @@ public class WeddingController {
         return new ResponseEntity<List<User>>(weddingService.singleWedding(weddingId).get().getAttendees(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{weddingId}")
-    public ResponseEntity<String> deleteWedding(@PathVariable String weddingId) {
-        weddingService.deleteWedding(weddingId);
-        return new ResponseEntity<String>("Wedding deleted", HttpStatus.OK);
-    }
+    @PostMapping("/delete")
+    public String deleteWedding(@RequestParam("weddingId") String weddingId) {
+        if (weddingId == null) {
+            // Handle the null weddingId case
+            return "errorPage";
+        }
+        weddingService.deleteWedding(weddingId);  // Ensure the delete logic works
+    return "redirect:/";  // Redirect to the wedding list or home page after successful deletion
+}
 
     @PostMapping("/createwedding")
     public ResponseEntity<Wedding> createWedding(@RequestParam String weddingTitle, @RequestParam String location, @RequestParam String dateTime, @RequestParam String maxAttendees, @RequestParam String email) {  

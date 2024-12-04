@@ -3,9 +3,11 @@ package dev.construction.weddingplanner;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +34,12 @@ public class ItemController {
     @GetMapping("/{WeddingId}")
     public ResponseEntity<List<Item>> getItemsById(@PathVariable String WeddingId) {
         return new ResponseEntity<List<Item>>(itemService.getItemsByWeddingId(WeddingId), HttpStatus.OK);
+    }
+    @PostMapping("/setpurchased")
+    public ResponseEntity<Item> setPurchased(Model model) {
+        @SuppressWarnings("null")
+        ObjectId itemId = new ObjectId(model.getAttribute("itemId").toString());
+        return new ResponseEntity<Item>(itemService.setPurchased(itemId), HttpStatus.OK);
     }
     // @GetMapping("/{WeddingId}")
     // public ResponseEntity<List<Item>> getItemsById(@RequestBody Map<String, String> payload) {

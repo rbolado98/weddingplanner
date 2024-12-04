@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.bson.types.ObjectId;
 import org.json.*;
 
 @Controller
@@ -394,9 +395,15 @@ public class WelcomeController {
                 registryArray = new JSONArray(registryResponse.body());
                 for (int i = 0; i < registryArray.length(); i++) {
                     JSONObject item = registryArray.getJSONObject(i);
+                    ObjectId id = new ObjectId(item.getString("id"));
+                    if (id == null) {
+                        id = new ObjectId();
+                    }
                     registry.add(new Item(
+                            // id,
                             item.getString("name"),
                             item.getString("link")
+                            // item.getBoolean(weddingId)
                     ));
                 }
         } 

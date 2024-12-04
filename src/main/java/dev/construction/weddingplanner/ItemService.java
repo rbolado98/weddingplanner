@@ -2,6 +2,7 @@ package dev.construction.weddingplanner;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -22,6 +23,16 @@ public class ItemService {
             .matching(Criteria.where("weddingId").is(weddingId))
             .apply(new Update().push("registry").value(item))
             .first();
+        return item;
+    }
+    public Item findById(ObjectId itemId) {
+        return itemRepository.findById(itemId).get();
+    }
+
+    public Item setPurchased(ObjectId itemId) {
+        Item item = itemRepository.findById(itemId).get();
+        item.setPurchased(true);
+        itemRepository.save(item);
         return item;
     }
     public List<Item> getItemsByWeddingId(String weddingId) {

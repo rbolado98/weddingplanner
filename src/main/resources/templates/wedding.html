@@ -161,6 +161,7 @@
             <div class="event-item" th:each="item : ${registry}">
                 <p><span>Item:</span> <span th:text="${item.name}"></span></p>
                 <p><span>Link:</span> <span th:text="${item.link}"></span></p>
+
             </div>
             <div th:if="${admin}">
             <h4>Add Registry Item</h4>

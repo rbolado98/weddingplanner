@@ -117,17 +117,20 @@
                     <p><span>Max Attendees:</span> <span class="rsvp-status" th:text="${wedding.maxAttendees}"></span></p>
                 </div>
             </div>
+            <div th:if="${admin}">
             <h3>RSVP'd</h3>
             <div class="event-item" th:each="attendee : ${attendees}">
                 <p><span>Name: </span> <span th:text="${attendee.name}"></span></p>
                 <p><span>Email: </span> <span th:text="${attendee.email}"></span></p>
 
             </div>
+            </div>
+            <div th:if="${admin}">
             <h3>Invited</h3>
             <div class="event-item" th:each="invitee : ${wedding.invited}">
                 <p><span th:text="${invitee}"></span></p>
             </div>
-            <div th:if="${admin}">
+            
                 <h4>Invite Someone:</h4>
                 <form id="inviteForm" action="/api/v1/weddings/addInvited" method="POST">
                     <div class="form-group">
@@ -138,11 +141,12 @@
                     <button type="submit" class="signup-button">Invite</button>
                 </form>
             </div>
+            <div th:if="${admin}">
             <h3>Waitlist</h3>
             <div class="event-item" th:each="waitlistee : ${wedding.waitlist}">
                 <p><span th:text="${waitlistee}"></span></p>
             </div>
-            <div th:if="${admin}">
+            
             <h4>Add Someone to Waitlist:</h4>
                 <form id="waitlistForm" action="/api/v1/weddings/addToWaitlist" method="POST">
                     <div class="form-group">

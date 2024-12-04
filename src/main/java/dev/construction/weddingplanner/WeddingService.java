@@ -38,6 +38,10 @@ public class WeddingService {
         return weddingRepository.findWeddingByAttendeesContaining(user);
     }
 
+    public void deleteWedding(String weddingId) {
+        weddingRepository.delete(weddingRepository.findWeddingByWeddingId(weddingId).get());
+    }
+
     public Wedding createWedding(String weddingTitle, String dateTime, String location, String maxAttendees, String email) {
         Wedding wedding = new Wedding(weddingTitle, dateTime, location, maxAttendees, email);
         mongoTemplate.insert(wedding, "weddings");

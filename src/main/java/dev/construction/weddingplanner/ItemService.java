@@ -25,13 +25,13 @@ public class ItemService {
             .first();
         return item;
     }
-    public Item findById(ObjectId itemId) {
-        return itemRepository.findById(itemId).get();
+    public Item findById(String itemId) {
+        return itemRepository.findByItemId(itemId).get();
     }
 
-    public Item setPurchased(ObjectId itemId) {
-        Item item = itemRepository.findById(itemId).get();
-        item.setPurchased(true);
+    public Item setPurchased(String itemId) {
+        Item item = itemRepository.findByItemId(itemId).get();
+        item.setPurchased(!item.isPurchased());
         itemRepository.save(item);
         return item;
     }

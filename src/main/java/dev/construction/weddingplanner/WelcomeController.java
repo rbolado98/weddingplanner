@@ -395,15 +395,12 @@ public class WelcomeController {
                 registryArray = new JSONArray(registryResponse.body());
                 for (int i = 0; i < registryArray.length(); i++) {
                     JSONObject item = registryArray.getJSONObject(i);
-                    ObjectId id = new ObjectId(item.getString("id"));
-                    if (id == null) {
-                        id = new ObjectId();
-                    }
+                    System.out.println("Item: " + item);
                     registry.add(new Item(
-                            // id,
+                            item.getString("itemId"),
                             item.getString("name"),
-                            item.getString("link")
-                            // item.getBoolean(weddingId)
+                            item.getString("link"),
+                            item.getBoolean("purchased")
                     ));
                 }
         } 
@@ -431,11 +428,8 @@ public class WelcomeController {
         catch (Exception e) {
             System.out.println("Error: " + e);
         }
-        System.out.println("ADMIIIIN YES OR NO:"+model.getAttribute("admin").toString());
         // Add wedding and registry to the model
-        int attendeesCount = attendees.size();
-        System.out.println(attendeesCount);
-        model.addAttribute("attendeesCount", attendeesCount);
+        model.addAttribute("attendeesCount", attendees.size());
         model.addAttribute("attendees", attendees);
         model.addAttribute("wedding", wedding);
         model.addAttribute("registry", registry);

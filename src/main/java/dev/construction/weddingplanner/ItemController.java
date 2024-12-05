@@ -35,10 +35,12 @@ public class ItemController {
     public ResponseEntity<List<Item>> getItemsById(@PathVariable String WeddingId) {
         return new ResponseEntity<List<Item>>(itemService.getItemsByWeddingId(WeddingId), HttpStatus.OK);
     }
+    @GetMapping("/item")
+    public ResponseEntity<Item> getItemById(@RequestParam String itemId) {
+        return new ResponseEntity<Item>(itemService.findById(itemId), HttpStatus.OK);
+    }
     @PostMapping("/setpurchased")
-    public ResponseEntity<Item> setPurchased(Model model) {
-        @SuppressWarnings("null")
-        ObjectId itemId = new ObjectId(model.getAttribute("itemId").toString());
+    public ResponseEntity<Item> setPurchased(@RequestParam String itemId) {
         return new ResponseEntity<Item>(itemService.setPurchased(itemId), HttpStatus.OK);
     }
     // @GetMapping("/{WeddingId}")

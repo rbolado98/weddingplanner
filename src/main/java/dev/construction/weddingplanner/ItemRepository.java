@@ -7,9 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemRepository extends MongoRepository<Item, ObjectId>  {
-    @Override
-    default Optional<Item> findById(ObjectId id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
-    }
+    Optional<Item> findByItemId(String itemId);
 }

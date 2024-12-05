@@ -15,25 +15,29 @@ import lombok.NoArgsConstructor;
 public class Item {
     @Id
     private ObjectId id;
+    private String itemId;
     private String name;
     private String link;
     private boolean purchased;
 
-    public Item(ObjectId id, String name, String link) {
-        this.id = id;
+    public Item(String name, String link) {
+        this.itemId = java.util.UUID.randomUUID().toString();
         this.name = name;
         this.link = link;
         this.purchased = false;
 
     }
-    public Item(String name){
-        this.name = name;
-        this.purchased = false;
-    }
-    public Item(String name, String link) {
+    public Item(String itemId, String name, String link, boolean purchased) {
+        this.itemId = itemId;
         this.name = name;
         this.link = link;
-        this.purchased = false;
+        this.purchased = purchased;
+
+    }
+    public Item(String name, String link, boolean purchased) {
+        this.name = name;
+        this.link = link;
+        this.purchased = purchased;
     }
 }
 

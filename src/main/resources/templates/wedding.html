@@ -137,7 +137,7 @@
             </div>
             
                 <h4>Invite Someone:</h4>
-                <form id="inviteForm" action="/api/v1/weddings/addInvited" method="POST">
+                <form class="inviteForm" action="/api/v1/weddings/addInvited" method="POST">
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
@@ -153,7 +153,7 @@
             </div>
             
             <h4>Add Someone to Waitlist:</h4>
-                <form id="waitlistForm" action="/api/v1/weddings/addToWaitlist" method="POST">
+                <form class="waitlistForm" action="/api/v1/weddings/addToWaitlist" method="POST">
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
@@ -169,7 +169,7 @@
                 <div th:if="${item.purchased}">
                     <p><span>Status: Purchased</span></p>
                     <div th:if="${admin}">
-                        <form id="availableForm" action="/api/v1/items/setpurchased" method="POST">
+                        <form class="availableForm" action="/api/v1/items/setpurchased" method="POST">
                             <input type="hidden" name="itemId" th:value="${item.itemId}">
                             <button type="submit" class="purchased-button">Mark as Available</button>
                         </form>
@@ -177,7 +177,7 @@
                 </div>
                 <div th:if="${!item.purchased}">
                     <p><span>Status: Available</span></p>
-                    <form id="purchasedForm" action="/api/v1/items/setpurchased" method="POST">
+                    <form class="purchasedForm" action="/api/v1/items/setpurchased" method="POST">
                         <input type="hidden" name="itemId" th:value="${item.itemId}">
                         <button type="submit" class="purchased-button">Mark as Purchased</button>
                     </form>
@@ -185,7 +185,7 @@
             </div>
             <div th:if="${admin}">
             <h4>Add Registry Item</h4>
-                <form id="itemForm" action="/api/v1/items" method="POST">
+                <form class="itemForm" action="/api/v1/items" method="POST">
                     <div class="form-group">
                         <label for="name">Gift:</label>
                         <input type="text" id="name" name="name" placeholder="e.g. Toaster" required>
@@ -218,85 +218,50 @@
     </footer>
 
     <script>
-        document.getElementById('availableForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent the default form submission
-    
-            // Gather form data
-            const formData = new FormData(this);
-    
-            try {
-                // Send POST request to the server
-                const response = await fetch(this.action, {
-                    method: this.method,
-                    body: formData
+        // Generic function to handle form submissions
+        function handleFormSubmission(formClass) {
+            // Select all forms with the given class
+            const forms = document.querySelectorAll(`.${formClass}`);
+            
+            forms.forEach((form) => {
+                form.addEventListener('submit', async function (event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    // Gather form data
+                    const formData = new FormData(this);
+
+                    try {
+                        // Send POST request to the server
+                        const response = await fetch(this.action, {
+                            method: this.method,
+                            body: formData
+                        });
+
+                        if (response.ok) {
+                            // Reload the page if the response is successful
+                            alert('Successfully Updated!');
+                            location.reload(); // Reload the current page
+                        } else {
+                            const error = await response.json();
+                            alert(`Error: ${error.message}`);
+                        }
+                    } catch (error) {
+                        console.error('Error submitting form:', error);
+                        alert('An error occurred while submitting the form.');
+                    }
                 });
-    
-                if (response.ok) {
-                    // Reload the page if the response is successful
-                    alert('Item Successfully Updated!');
-                    location.reload(); // Reload the current page
-                } else {
-                    const error = await response.json();
-                    alert(`Error: ${error.message}`);
-                }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                alert('An error occurred while submitting the form.');
-            }
-        });
-        document.getElementById('purchasedForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent the default form submission
-    
-            // Gather form data
-            const formData = new FormData(this);
-    
-            try {
-                // Send POST request to the server
-                const response = await fetch(this.action, {
-                    method: this.method,
-                    body: formData
-                });
-    
-                if (response.ok) {
-                    // Reload the page if the response is successful
-                    alert('Item Successfully Updated!');
-                    location.reload(); // Reload the current page
-                } else {
-                    const error = await response.json();
-                    alert(`Error: ${error.message}`);
-                }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                alert('An error occurred while submitting the form.');
-            }
-        });
-        document.getElementById('inviteForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent the default form submission
-    
-            // Gather form data
-            const formData = new FormData(this);
-    
-            try {
-                // Send POST request to the server
-                const response = await fetch(this.action, {
-                    method: this.method,
-                    body: formData
-                });
-    
-                if (response.ok) {
-                    // Reload the page if the response is successful
-                    alert('Successfully Added!');
-                    location.reload(); // Reload the current page
-                } else {
-                    const error = await response.json();
-                    alert(`Error: ${error.message}`);
-                }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                alert('An error occurred while submitting the form.');
-            }
-        });
-        
+            });
+        }
+
+        // List of form classes to apply the handler
+        const formClasses = [
+            'purchasedForm',
+            'availableForm',
+            'inviteForm',
+            'waitlistForm',
+            'itemForm'
+        ];
+        formClasses.forEach(handleFormSubmission);
         document.getElementById('deleteForm').addEventListener('submit', async function (event) {
             event.preventDefault(); // Prevent the default form submission
     
@@ -323,58 +288,58 @@
                 alert('An error occurred while submitting the form.');
             }
         });
-        document.getElementById('waitlistForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent the default form submission
+    //     document.getElementById('waitlistForm').addEventListener('submit', async function (event) {
+    //         event.preventDefault(); // Prevent the default form submission
     
-            // Gather form data
-            const formData = new FormData(this);
+    //         // Gather form data
+    //         const formData = new FormData(this);
     
-            try {
-                // Send POST request to the server
-                const response = await fetch(this.action, {
-                    method: this.method,
-                    body: formData
-                });
+    //         try {
+    //             // Send POST request to the server
+    //             const response = await fetch(this.action, {
+    //                 method: this.method,
+    //                 body: formData
+    //             });
     
-                if (response.ok) {
-                    // Reload the page if the response is successful
-                    alert('Successfully Added!');
-                    location.reload(); // Reload the current page
-                } else {
-                    const error = await response.json();
-                    alert(`Error: ${error.message}`);
-                }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                alert('An error occurred while submitting the form.');
-            }
-        });
-        document.getElementById('itemForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent the default form submission
+    //             if (response.ok) {
+    //                 // Reload the page if the response is successful
+    //                 alert('Successfully Added!');
+    //                 location.reload(); // Reload the current page
+    //             } else {
+    //                 const error = await response.json();
+    //                 alert(`Error: ${error.message}`);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error submitting form:', error);
+    //             alert('An error occurred while submitting the form.');
+    //         }
+    //     });
+    //     document.getElementById('itemForm').addEventListener('submit', async function (event) {
+    //         event.preventDefault(); // Prevent the default form submission
     
-            // Gather form data
-            const formData = new FormData(this);
+    //         // Gather form data
+    //         const formData = new FormData(this);
     
-            try {
-                // Send POST request to the server
-                const response = await fetch(this.action, {
-                    method: this.method,
-                    body: formData
-                });
+    //         try {
+    //             // Send POST request to the server
+    //             const response = await fetch(this.action, {
+    //                 method: this.method,
+    //                 body: formData
+    //             });
     
-                if (response.ok) {
-                    // Reload the page if the response is successful
-                    alert('Successfully Added!');
-                    location.reload(); // Reload the current page
-                } else {
-                    const error = await response.json();
-                    alert(`Error: ${error.message}`);
-                }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                alert('An error occurred while submitting the form.');
-            }
-        });
+    //             if (response.ok) {
+    //                 // Reload the page if the response is successful
+    //                 alert('Successfully Added!');
+    //                 location.reload(); // Reload the current page
+    //             } else {
+    //                 const error = await response.json();
+    //                 alert(`Error: ${error.message}`);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error submitting form:', error);
+    //             alert('An error occurred while submitting the form.');
+    //         }
+    //     });
     </script>
 </body>
 </html>

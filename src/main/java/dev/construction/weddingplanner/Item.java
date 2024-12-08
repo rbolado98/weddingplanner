@@ -39,5 +39,10 @@ public class Item {
         this.link = link;
         this.purchased = purchased;
     }
+    // Inside Item class
+    public boolean isPurchased() {
+        return this.purchased; // Assuming 'purchased' is a field in the class
+    }
+
 }
 

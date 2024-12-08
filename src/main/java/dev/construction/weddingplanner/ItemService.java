@@ -35,6 +35,12 @@ public class ItemService {
         itemRepository.save(item);
         return item;
     }
+    public Item setPurchased(Boolean purchased, String itemId) {
+        Item item = itemRepository.findByItemId(itemId).get();
+        item.setPurchased(purchased);
+        itemRepository.save(item);
+        return item;
+    }
     public List<Item> getItemsByWeddingId(String weddingId) {
         // Fetch the Wedding document by weddingId
         Wedding wedding = weddingService.singleWedding(weddingId).get();

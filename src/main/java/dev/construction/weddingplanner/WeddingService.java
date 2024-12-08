@@ -37,6 +37,13 @@ public class WeddingService {
         User user = userRepository.findUserByEmail(email).get();
         return weddingRepository.findWeddingByAttendeesContaining(user);
     }
+    public List<String> setWaitlist(List<String> waitlist, String weddingId) {
+        mongoTemplate.update(Wedding.class)
+            .matching(Criteria.where("weddingId").is(weddingId))
+            .apply(new Update().set("waitlist", waitlist))
+            .first();
+        return waitlist;
+    }
 
     public void deleteWedding(String weddingId) {
         weddingRepository.delete(weddingRepository.findWeddingByWeddingId(weddingId).get());

@@ -95,4 +95,8 @@ public class Wedding {
     public List<String> getInvited() {
         return invited;
     }
+    // Inside Wedding class
+    public List<User> getAttendees() {
+        return this.attendees; // Assuming 'attendees' is a field in the class
+    }
 }

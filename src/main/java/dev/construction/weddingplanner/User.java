@@ -47,6 +47,10 @@ public class User {
     public String getPassword() {
         return password;
     }
+    // Inside User class
+    public boolean isAdmin() {
+        return this.isAdmin; // Assuming 'admin' is a field in the class
+    }
 }
 
 

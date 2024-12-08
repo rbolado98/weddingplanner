@@ -108,6 +108,10 @@ public class WelcomeController {
         return "redirect:/login"; // Redirect to home page on logout
     }
 
+    @PostMapping("/setWaitlist")
+    public List<String> setWaitlist(@RequestParam List<String> waitlist, @RequestParam String weddingId) {
+        return weddingService.setWaitlist(waitlist, weddingId);
+    }
     // Route for the Signup Page (signup.html)
     @PostMapping("/createuser")
     public String handleSignup(@RequestParam String name, @RequestParam String email, @RequestParam String password, @RequestParam String confirmpassword, HttpSession session, Model model) {
@@ -240,6 +244,17 @@ public class WelcomeController {
         }
         model.addAttribute("weddings", weddings);
         return "attending"; // Matches profile.html in the templates folder
+    }
+
+    @GetMapping("/getCreatedBy")
+    public String getCreatedBy(@RequestParam String email){
+        User user = userService.findUserByEmail(email).get();
+        return user.getName();
+    }
+    @GetMapping("/getEmail")    
+    public String getEmail(@RequestParam String email){
+        User user = userService.findUserByEmail(email).get();
+        return user.getEmail();
     }
 
     @GetMapping("/allweddings")

@@ -133,7 +133,7 @@ POST	/api/v1/weddings/addToWaitlist	Add someone to the waitlist
 ⸻
 
 👥 Authors
-	•	Developed by Ruben Bolado and Luis
+	•	Developed by Ruben Bolado (Full-Stack) and Luis Sanchez (Contributed with HTML Templates)
 	•	University of Texas at El Paso (UTEP)
 
 ⸻

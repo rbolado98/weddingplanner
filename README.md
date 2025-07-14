@@ -1,7 +1,3 @@
-Here’s a comprehensive README.md for your Wedding Planner system, tailored to the components you’ve shared:
-
-⸻
-
 💍 Wedding Planner App
 
 A full-stack web application to plan and manage wedding events. This platform allows users to create wedding events, manage guest lists (RSVP, invites, waitlist), handle registries, and collaborate using a clean user interface and robust backend services.
@@ -136,6 +132,4 @@ POST	/api/v1/weddings/addToWaitlist	Add someone to the waitlist
 	•	Developed by Ruben Bolado (Full-Stack) and Luis Sanchez (Contributed with HTML Templates)
 	•	University of Texas at El Paso (UTEP)
 
-⸻
 
-Let me know if you want a PDF version or if you’d like a shortened summary for a poster/demo handout.

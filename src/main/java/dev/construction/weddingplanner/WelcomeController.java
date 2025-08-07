@@ -73,14 +73,21 @@ public class WelcomeController {
     
     @PostMapping("/validateUser")
     public String handleLogin(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
-        User user = userService.findUserByEmail(email).get();
-        if (userService.authenticate(email, password)) {
-            model.addAttribute("email", email);
-            session.setAttribute("loggedInUser", email);
-            if (user.isAdmin()) {
-                model.addAttribute("admin", true);
+        Optional<User> userOptional = userService.findUserByEmail(email);
+        
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (userService.authenticate(email, password)) {
+                model.addAttribute("email", email);
+                session.setAttribute("loggedInUser", email);
+                if (user.isAdmin()) {
+                    model.addAttribute("admin", true);
+                }
+                return "redirect:/"; // Redirect to profile page on successful login
+            } else {
+                model.addAttribute("error", "Invalid email or password");
+                return "index"; // Return to login page with error message
             }
-            return "redirect:/"; // Redirect to profile page on successful login
         } else {
             model.addAttribute("error", "Invalid email or password");
             return "index"; // Return to login page with error message

@@ -60,30 +60,38 @@ Database
 📌 Installation Instructions
 
 Prerequisites
-	•	Java 17+
-	•	Maven
-	•	MongoDB (running locally or via Atlas)
+	•	Java 17+ (OpenJDK 21 recommended)
+	•	MongoDB Atlas account (cloud database)
 	•	Git
 
 Backend Setup
 
-cd backend
-mvn clean install
-mvn spring-boot:run
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd weddingplanner
+```
 
-Ensure your application.properties includes:
+2. Install dependencies using Maven wrapper (no need to install Maven globally):
+```bash
+./mvnw clean install
+```
 
-spring.data.mongodb.database=weddingplanner
-spring.data.mongodb.uri=mongodb://localhost:27017
-server.port=8080
+3. Start the application:
+```bash
+./mvnw spring-boot:run
+```
+
+4. Access the application:
+- **Login page**: http://localhost:8080/login
+- **Home page**: http://localhost:8080
+- **Sign up**: http://localhost:8080/signup
+
+Note: The application uses MongoDB Atlas (cloud database) and is pre-configured with the necessary connection settings in `application.properties`.
 
 Frontend Setup
 
-The HTML files are located under src/main/resources/templates/ and are served by the Spring Boot app via Thymeleaf.
-
-To access the app:
-
-http://localhost:8080/
+The HTML templates are located under `src/main/resources/templates/` and are served by the Spring Boot app via Thymeleaf. No separate frontend setup is required.
 
 
 ⸻
